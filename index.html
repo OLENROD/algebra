@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus Álgebra Lineal · 2º Parcial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, svg: { fontCache: 'global' }, startup: { typeset: true } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" defer></script>
+<style>
+:root{
+  /* Layout: barra lateral fija con las 5 secciones del curso + columna de lectura de ~70ch */
+  --bg:#f3f4f1; --surface:#ffffff; --ink:#1b2433; --muted:#5b6474; --line:#d9dcd6;
+  --accent:#0f6b67; --accent-soft:#e1efed; --why:#9a5a17; --why-soft:#f7ecdf;
+  --ok:#2e7d32; --bad:#b3261e;
+  --display:"IBM Plex Serif", Georgia, serif; --body:"IBM Plex Sans", system-ui, sans-serif; --mono:"IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#141a22; --surface:#1c2430; --ink:#e6e9ee; --muted:#9aa4b2; --line:#2e3846;
+  --accent:#5cc5bd; --accent-soft:#183634; --why:#e3a35c; --why-soft:#3a2a18; --ok:#7bc67e; --bad:#ef8a80; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#141a22; --surface:#1c2430; --ink:#e6e9ee; --muted:#9aa4b2; --line:#2e3846;
+  --accent:#5cc5bd; --accent-soft:#183634; --why:#e3a35c; --why-soft:#3a2a18; --ok:#7bc67e; --bad:#ef8a80; color-scheme:dark; }
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6}
+a{color:var(--accent)}
+.app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
+nav.side{background:var(--surface);border-right:1px solid var(--line);padding:20px 16px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{font-family:var(--display);font-size:1.15rem;font-weight:600;line-height:1.25;margin:0 0 4px}
+.brand small{display:block;font-family:var(--body);font-weight:400;font-size:.82rem;color:var(--muted)}
+.navgroup{margin-top:18px}
+.navgroup h4{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px;font-weight:600}
+.navgroup a{display:block;padding:5px 10px;border-radius:6px;text-decoration:none;color:var(--ink);font-size:.93rem}
+.navgroup a:hover{background:var(--accent-soft)}
+.navgroup a.active{background:var(--accent);color:var(--surface)}
+.navgroup a .tag{float:right;font-size:.72rem;color:var(--muted)}
+.navgroup a.active .tag{color:var(--surface)}
+main{padding:32px 40px 80px;max-width:900px;width:100%}
+.menu-btn{display:none}
+section.view{display:none}
+section.view.on{display:block}
+h1{font-family:var(--display);font-size:2rem;line-height:1.2;margin:0 0 8px;text-wrap:balance}
+h2{font-family:var(--display);font-size:1.4rem;margin:36px 0 10px;text-wrap:balance}
+h3{font-size:1.08rem;margin:26px 0 8px}
+.lead{color:var(--muted);font-size:1.05rem;margin:0 0 20px;max-width:68ch}
+p,li{max-width:72ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.grid .card{margin:0}
+.card h3{margin-top:0}
+.def,.thm{border-left:4px solid var(--accent);background:var(--surface);padding:12px 18px;margin:14px 0;border-radius:0 8px 8px 0}
+.thm{border-left-color:var(--ink)}
+.def b.lbl,.thm b.lbl{display:block;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.why{background:var(--why-soft);border-left:4px solid var(--why);padding:10px 16px;margin:10px 0;border-radius:0 8px 8px 0;font-size:.96rem}
+.why::before{content:"¿Por qué? ";font-weight:600;color:var(--why)}
+.trap{background:var(--surface);border:1px dashed var(--bad);padding:10px 16px;border-radius:8px;margin:10px 0;font-size:.96rem}
+.trap::before{content:"Trampa típica: ";font-weight:600;color:var(--bad)}
+.uses{font-size:.85rem;color:var(--muted)}
+.pill{display:inline-block;font-size:.75rem;font-weight:600;padding:2px 9px;border-radius:99px;background:var(--accent-soft);color:var(--accent);text-decoration:none;margin-right:4px}
+ol.steps{counter-reset:s;list-style:none;padding-left:0}
+ol.steps>li{counter-increment:s;position:relative;padding-left:40px;margin:14px 0}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--surface);display:grid;place-items:center;font-weight:600;font-size:.88rem}
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:18px 0;overflow:hidden}
+.ex-h{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--line)}
+.ex-h h3{margin:0}
+.ex-b{padding:6px 18px 14px}
+.stmt{background:var(--bg);padding:10px 14px;border-radius:8px;margin:10px 0}
+details.sol{margin:10px 0;border:1px solid var(--line);border-radius:8px}
+details.sol>summary{cursor:pointer;padding:8px 14px;font-weight:600;color:var(--accent);list-style:none}
+details.sol>summary::before{content:"▸ "}
+details.sol[open]>summary::before{content:"▾ "}
+details.sol>div{padding:0 16px 10px}
+.ans{border:2px solid var(--accent);border-radius:8px;padding:8px 14px;margin:10px 0;background:var(--accent-soft)}
+.ans::before{content:"Respuesta: ";font-weight:600}
+.done{display:inline-flex;gap:6px;align-items:center;font-size:.86rem;color:var(--muted);cursor:pointer}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tw{overflow-x:auto;margin:12px 0}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.btn{font:inherit;font-weight:600;font-size:.92rem;border:1px solid var(--accent);background:var(--accent);color:var(--surface);padding:8px 16px;border-radius:8px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--why);outline-offset:2px}
+.progress{height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+.progress>div{height:100%;background:var(--accent);width:0}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:14px 0}
+.q .opts{display:grid;gap:8px;margin-top:10px}
+.q button.opt{font:inherit;text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer;color:var(--ink)}
+.q button.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--surface))}
+.q button.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,var(--surface))}
+.q .fb{margin-top:10px;font-size:.95rem;display:none}
+.q.answered .fb{display:block}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+select{font:inherit;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.timer{font-family:var(--mono);font-size:2rem;font-variant-numeric:tabular-nums}
+.check li{list-style:none;margin:6px 0}
+.mono{font-family:var(--mono);font-size:.9em}
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
+.lvl{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:99px;border:1px solid currentColor;margin-left:4px}
+.lvl.easy{color:var(--ok)} .lvl.mid{color:var(--why)} .lvl.hard{color:var(--bad)}
+.prio{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:99px;background:var(--bad);color:var(--surface);margin-left:4px}
+.notes{border:1px solid var(--line);border-left:4px solid var(--why);background:var(--surface);padding:10px 16px;margin:14px 0;border-radius:0 8px 8px 0}
+.notes>b.lbl{display:block;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--why);margin-bottom:2px}
+.fix{color:var(--bad);font-weight:600}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  nav.side{position:fixed;inset:0 auto 0 0;width:280px;transform:translateX(-100%);transition:transform .2s;z-index:10;box-shadow:0 0 30px rgba(0,0,0,.25)}
+  nav.side.open{transform:none}
+  main{padding:20px 16px 80px}
+  .menu-btn{display:inline-block;margin-bottom:14px}
+}
+@media (prefers-reduced-motion:reduce){nav.side{transition:none}}
+</style>
+</head>
+<body>
+<div class="app">
+<nav class="side" id="side" aria-label="Secciones del campus">
+  <p class="brand">Álgebra Lineal<small>Campus del 2º parcial · ITBA</small></p>
+  <div class="navgroup"><a href="#inicio" data-v="inicio">Inicio y mapa del parcial</a></div>
+  <div class="navgroup"><h4>Para estudiar ya</h4>
+    <a href="#practica" data-v="practica">Ejercicios de clase y práctica <span class="tag">nuevo</span></a>
+    <a href="#resumen" data-v="resumen">Resumen rápido (tus apuntes)</a>
+  </div>
+  <div class="navgroup"><h4>Fundamentos teóricos</h4>
+    <a href="#t-tl" data-v="t-tl">1 · Transformaciones lineales</a>
+    <a href="#t-matriz" data-v="t-matriz">2 · Matriz asociada</a>
+    <a href="#t-autoval" data-v="t-autoval">3 · Autovalores y autovectores</a>
+    <a href="#t-diag" data-v="t-diag">4 · Semejanza y diagonalización</a>
+    <a href="#t-pi" data-v="t-pi">5 · Producto interno</a>
+  </div>
+  <div class="navgroup"><h4>Modelos de ejercicio</h4>
+    <a href="#modelo-1" data-v="modelo-1">Modelo 1 · TL por fórmula</a>
+    <a href="#modelo-2" data-v="modelo-2">Modelo 2 · TL por matriz en base B</a>
+    <a href="#modelo-3" data-v="modelo-3">Modelo 3 · Autovalores y B = f(A)</a>
+    <a href="#modelo-4" data-v="modelo-4">Modelo 4 · Producto interno</a>
+    <a href="#modelo-5" data-v="modelo-5">Modelo 5 · Teórico / V o F</a>
+  </div>
+  <div class="navgroup"><h4>Parciales resueltos</h4>
+    <a href="#p-2018" data-v="p-2018">1er cuat. 2018</a>
+    <a href="#p-2019" data-v="p-2019">1er cuat. 2019</a>
+    <a href="#p-2024" data-v="p-2024">1er cuat. 2024</a>
+    <a href="#p-viejo" data-v="p-viejo">Parcial viejo (foto)</a>
+  </div>
+  <div class="navgroup"><h4>Evaluación</h4>
+    <a href="#quiz" data-v="quiz">Autoevaluación</a>
+    <a href="#simulacro" data-v="simulacro">Simulacro de parcial</a>
+  </div>
+</nav>
+
+<main>
+<button class="btn ghost menu-btn" id="menuBtn" aria-controls="side">☰ Secciones</button>
+
+<!-- ============================ INICIO ============================ -->
+<section class="view" id="v-inicio">
+  <h1>Campus del 2º parcial de Álgebra Lineal</h1>
+  <p class="lead">Teoría, los cinco modelos de ejercicio que se repiten en todos los parciales, cuatro parciales resueltos y justificados, y una zona para evaluarte. Condición de aprobación del parcial: <b>2 ejercicios bien</b>, con todas las respuestas justificadas.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between"><b>Tu progreso en los parciales</b><span id="progTxt" class="uses">0 de 20 ejercicios marcados</span></div>
+    <div class="progress" style="margin-top:8px"><div id="progBar"></div></div>
+    <p class="uses" style="margin:8px 0 0">Marcá “Lo resolví bien” en cada ejercicio de los parciales. Se guarda solo en este navegador.</p>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--bad)">
+    <b>Antes que nada, estudiá estos cuatro (te dijeron que entran casi igual):</b>
+    <ol style="margin:6px 0 4px">
+      <li>\(\mathbb R^4\): complemento ortogonal y distancia (Modelo 4)</li>
+      <li>\(B=\{1,1+x,(1+x)^2\}\): Nu, Im y \(T^{-1}(S)\) (Modelo 2)</li>
+      <li>Clase 19/11, ej. 2: Nu, Im y \(T(p)=2+x+x^2\) (Modelo 2)</li>
+      <li>Clase 19/11, ej. 3: base ortogonal de \(S\) y proyección (Modelo 4)</li>
+    </ol>
+    <a class="btn" href="#practica" style="display:inline-block;text-decoration:none;margin-top:6px">Ir a Ejercicios de clase y práctica</a>
+  </div>
+
+  <h2>Cómo usar el campus</h2>
+  <ol class="steps">
+    <li><b>Teoría.</b> Cada unidad dice qué teorema se usa en qué modelo de ejercicio. Leela con el modelo al lado.</li>
+    <li><b>Modelos.</b> Cada modelo tiene la receta paso a paso, con el porqué de cada paso, las trampas que aparecieron en parciales y una plantilla de redacción.</li>
+    <li><b>Parciales.</b> Intentá cada ejercicio antes de abrir la resolución. Cada paso tiene su justificación, que es lo que se evalúa.</li>
+    <li><b>Evaluación.</b> Preguntas de autoevaluación por modelo y un simulacro con reloj de 2 horas.</li>
+  </ol>
+
+  <h2>Mapa del parcial: qué se toma en cada ejercicio</h2>
+  <p>Los cuatro parciales tienen la misma estructura. El orden de los ejercicios 3 y 4 a veces se invierte (en el parcial de la foto, producto interno es el 3 y autovalores el 4).</p>
+  <div class="tw"><table>
+    <thead><tr><th>Modelo</th><th>2018</th><th>2019</th><th>2024</th><th>Parcial viejo</th></tr></thead>
+    <tbody>
+      <tr><td><a class="pill" href="#modelo-1">1</a> TL dada por fórmula: probar que es TL + Nu/Im o isomorfismo</td><td>Ej 1: \(T(X)=XA\) en \(\mathbb R^{2\times2}\)</td><td>Ej 1: isomorfismo con parámetros \(\alpha,\beta\)</td><td>Ej 1: \(G:P_2\to\mathbb R^3\), ¿isomorfismo?</td><td>Ej 1: \(G(p)=(p(1),p'(1),p''(1))\)</td></tr>
+      <tr><td><a class="pill" href="#modelo-2">2</a> TL dada por matriz en base B o por condiciones</td><td>Ej 2: \(F\circ F=O\), matriz y \(F(S)\)</td><td>Ej 2: Nu, Im y \(F^{-1}(S)\)</td><td>Ej 2: Nu, Im y \(T(p)=4\)</td><td>Ej 2: Nu, Im y \(T(p)=4\)</td></tr>
+      <tr><td><a class="pill" href="#modelo-3">3</a> Autovalores, espacios propios y diagonalizar \(B=f(A)\)</td><td>Ej 3: \(B=(A^T+4I)^{100}\)</td><td>Ej 3: \(B=5A^{-1}+2I\)</td><td>Ej 3: \(B=12A^{-1}+2I\)</td><td>Ej 4: \(B=(A^3-60I)^{100}\)</td></tr>
+      <tr><td><a class="pill" href="#modelo-4">4</a> Producto interno: axioma, complemento ortogonal, norma/distancia</td><td>Ej 4: en \(P_1\), \(\|p\|=5\)</td><td>Ej 4: en \(P_1\), \(H^\perp\)</td><td>Ej 4: en \(P_2\), \(d(p,q)=\sqrt{14}\)</td><td>Ej 3: \(X^TAY\) en \(\mathbb R^2\)</td></tr>
+      <tr><td><a class="pill" href="#modelo-5">5</a> Teórico: diagonalización / traza de \(A^k\) + ortogonalidad</td><td>Ej 5: V o F</td><td>Ej 5: V o F</td><td>Ej 5: traza de \(A^5\) + V o F</td><td>Ej 5: traza de \(A^3\) + demostración</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Las cinco ideas que más puntos dan</h2>
+  <div class="grid">
+    <div class="card"><h3>Teorema de la dimensión</h3><p>\(\dim V=\dim \mathrm{Nu}(T)+\dim \mathrm{Im}(T)\). Te ahorra cuentas: conociendo una dimensión sabés la otra.</p></div>
+    <div class="card"><h3>Columnas = imágenes</h3><p>Las columnas de \([T]_B\) son las <b>coordenadas</b> de \(T(v_i)\). Para pasar a polinomios hay que armar la combinación con la base.</p></div>
+    <div class="card"><h3>Espacio propio = núcleo</h3><p>\(S_\lambda=\mathrm{Nu}(A-\lambda I)\) y \(\dim S_\lambda=n-\mathrm{rango}(A-\lambda I)\).</p></div>
+    <div class="card"><h3>\(f(A)\) hereda autovectores</h3><p>Si \(Av=\lambda v\), entonces \(q(A)v=q(\lambda)v\) y \(A^{-1}v=\tfrac1\lambda v\). No hace falta calcular \(B\).</p></div>
+    <div class="card"><h3>Complemento por dimensión</h3><p>\(\dim S^\perp=\dim V-\dim S\). Si \(S\) es “\(\langle p,w\rangle=0\)”, entonces \(S^\perp=\mathrm{gen}\{w\}\).</p></div>
+  </div>
+</section>
+
+<!-- ============================ PRÁCTICA NUEVA ============================ -->
+<section class="view" id="v-practica">
+  <h1>Ejercicios de clase y práctica</h1>
+  <p class="lead">Los ejercicios que mandaste, resueltos y justificados, ordenados por modelo. <span class="prio">Muy probable</span> marca los que te dijeron que entran casi igual. La dificultad sale de tus caritas.</p>
+
+  <div class="card">
+    <b>Prioridad para estudiar</b>
+    <ol>
+      <li><a href="#practica" data-jump="f2-4">R⁴: complemento ortogonal y distancia</a> <span class="prio">Muy probable</span> · Modelo 4</li>
+      <li><a href="#practica" data-jump="f3-1">\(B=\{1,1+x,(1+x)^2\}\): Nu, Im y \(T^{-1}(S)\)</a> <span class="prio">Muy probable</span> · Modelo 2</li>
+      <li><a href="#practica" data-jump="c-2">Clase 19/11, ej. 2: Nu, Im y \(T(p)=2+x+x^2\)</a> <span class="prio">Muy probable</span> · Modelo 2</li>
+      <li><a href="#practica" data-jump="c-3">Clase 19/11, ej. 3: base ortogonal y proyección</a> <span class="prio">Muy probable</span> · Modelo 4</li>
+      <li>El resto: clase ej. 1, autovalores (\(A^6-5A^2\) y \(5A^{-1}+2I\)), ejercicio 5 con base abstracta, y 2024 2C ej. 4.</li>
+    </ol>
+    <p class="uses" style="margin:0">En el <a href="#simulacro">Simulacro</a> está la opción “Parcial probable”, armada con un ejercicio de cada modelo de esta página. Tus notas mencionan otro parcial del 12/11; si lo conseguís, se agrega acá.</p>
+  </div>
+
+  <!-- ===== MODELO 1 ===== -->
+  <h2>Modelo 1 · TL por fórmula</h2>
+
+  <div class="ex" data-ex="c-1"><div class="ex-h"><h3>Clase 19/11 · Ej. 1 <a class="pill" href="#modelo-1">Modelo 1</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">Sea \(T:\mathbb R^3\to P_2\), \(T(a,b,c)=(a+b)+(b-c)x+(a+c)x^2\).<br>a) Determinar que \(T\) es TL. b) Determine si \(T\) es isomorfismo. Justifique con propiedades del núcleo y la imagen.</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>Sean \(u=(a,b,c)\), \(u'=(a',b',c')\in\mathbb R^3\) y \(\alpha,\beta\in\mathbb R\). Entonces \(\alpha u+\beta u'=(\alpha a+\beta a',\ \alpha b+\beta b',\ \alpha c+\beta c')\) y</p>
+      \[T(\alpha u+\beta u')=\big[(\alpha a+\beta a')+(\alpha b+\beta b')\big]+\big[(\alpha b+\beta b')-(\alpha c+\beta c')\big]x+\big[(\alpha a+\beta a')+(\alpha c+\beta c')\big]x^2\]
+      \[=\alpha\big[(a+b)+(b-c)x+(a+c)x^2\big]+\beta\big[(a'+b')+(b'-c')x+(a'+c')x^2\big]=\alpha T(u)+\beta T(u').\]
+      <div class="why">Usamos la definición en su forma de una sola condición. Cada coeficiente del polinomio es una combinación lineal de \(a,b,c\) sin términos constantes ni productos, y eso es lo que hace que se pueda “sacar” \(\alpha\) y \(\beta\) reagrupando.</div>
+      <div class="ans">\(T\) es transformación lineal.</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p><b>Núcleo.</b> \(T(a,b,c)=0\) (el polinomio nulo) \(\iff\) todos los coeficientes son 0:</p>
+      \[a+b=0,\quad b-c=0,\quad a+c=0\ \Rightarrow\ b=-a,\ c=b=-a\ \text{(la tercera se cumple: } a-a=0).\]
+      <p>\(\mathrm{Nu}(T)=\mathrm{gen}\{(1,-1,-1)\}\), \(\dim\mathrm{Nu}(T)=1\).</p>
+      <div class="why">Un polinomio es nulo si y solo si todos sus coeficientes son nulos. El sistema tiene una variable libre: la tercera ecuación es combinación de las otras (es la primera menos la segunda).</div>
+      <p><b>Imagen.</b> Por el teorema de la dimensión, \(\dim\mathrm{Im}(T)=3-1=2&lt;3=\dim P_2\). Las imágenes de la base canónica generan la imagen: \(T(1,0,0)=1+x^2\), \(T(0,1,0)=1+x\), \(T(0,0,1)=-x+x^2\). Como \(T(e_3)=T(e_1)-T(e_2)\), alcanza con dos LI.</p>
+      <p>\(\mathrm{Im}(T)=\mathrm{gen}\{1+x^2,\ 1+x\}\).</p>
+      <div class="ans">\(T\) no es isomorfismo: \(\mathrm{Nu}(T)\neq\{0\}\), así que no es inyectiva, y \(\dim\mathrm{Im}(T)=2\neq3\), así que tampoco es sobreyectiva.</div>
+    </div></details>
+  </div></div>
+
+  <!-- ===== MODELO 2 ===== -->
+  <h2>Modelo 2 · TL por matriz en base B</h2>
+
+  <div class="ex" data-ex="f3-1"><div class="ex-h"><h3>Práctica · Ej. 1 <a class="pill" href="#modelo-2">Modelo 2</a> <span class="prio">Muy probable</span></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">Sean \(T:P_2\to P_2\) TL y \(B=\{1,\ 1+x,\ (1+x)^2\}\) base de \(P_2\) tal que \([T]_B=\begin{pmatrix}1&0&1\\1&1&2\\-2&1&-1\end{pmatrix}\).<br>a) Halle una base de \(\mathrm{Nu}(T)\) y de \(\mathrm{Im}(T)\) <span class="lvl easy">fácil</span>. b) Sea \(S=\mathrm{gen}\{2+x\}\). Halle una base de \(T^{-1}(S)=\{p\in P_2:T(p)\in S\}\) <span class="lvl mid">media</span>.</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <ol class="steps">
+        <li><b>Rango.</b> Como anotaste: columna 3 = columna 1 + columna 2, porque \((1,1,-2)+(0,1,1)=(1,2,-1)\). Las columnas 1 y 2 son LI (no son proporcionales). Rango 2.
+          <div class="why">\(\dim\mathrm{Im}(T)=\mathrm{rango}[T]_B=2\) y, por el teorema de la dimensión, \(\dim\mathrm{Nu}(T)=3-2=1\). Ya sabemos que buscamos un polinomio para el núcleo y dos para la imagen.</div></li>
+        <li><b>Núcleo.</b> La relación entre columnas da directamente una solución: \(1\cdot\mathrm{col}_1+1\cdot\mathrm{col}_2-1\cdot\mathrm{col}_3=0\), es decir \([T]_B(1,1,-1)^T=0\). Como \(\dim\mathrm{Nu}=1\), esa solución genera todo el núcleo. Traducimos:
+          \[p=1\cdot1+1\cdot(1+x)-1\cdot(1+x)^2=1+1+x-1-2x-x^2=1-x-x^2.\]
+          <div class="why">Si \(\sum c_j\,\mathrm{col}_j=0\), entonces \([T]_Bc=0\). Es otra forma de leer el núcleo sin resolver el sistema; igual podés verificarlo fila por fila: \(1-1=0\), \(1+1-2=0\), \(-2+1+1=0\).</div></li>
+        <li><b>Imagen.</b> Columnas 1 y 2, traducidas con \(B\):
+          \[(1,1,-2)\to1+(1+x)-2(1+x)^2=-3x-2x^2,\qquad(0,1,1)\to(1+x)+(1+x)^2=2+3x+x^2.\]</li>
+      </ol>
+      <div class="ans">\(B_{\mathrm{Nu}}=\{1-x-x^2\}\). \(B_{\mathrm{Im}}=\{3x+2x^2,\ 2+3x+x^2\}\).</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <ol class="steps">
+        <li><b>Coordenadas del generador de \(S\).</b> \(c_1\cdot1+c_2(1+x)+c_3(1+x)^2=2+x\). Comparando \(x^2\): \(c_3=0\); \(x\): \(c_2=1\); término independiente: \(c_1+c_2=2\Rightarrow c_1=1\). Entonces \([2+x]_B=(1,1,0)\) y \([S]_B=\{k(1,1,0):k\in\mathbb R\}\).</li>
+        <li><b>Planteo.</b> \(p\in T^{-1}(S)\iff T(p)\in S\iff[T]_B[p]_B=k(1,1,0)^T\) para algún \(k\):
+          \[c_1+c_3=k,\qquad c_1+c_2+2c_3=k,\qquad -2c_1+c_2-c_3=0.\]</li>
+        <li><b>Resolver.</b> Restando las dos primeras: \(c_2+c_3=0\Rightarrow c_2=-c_3\). En la tercera: \(-2c_1-c_3-c_3=0\Rightarrow c_1=-c_3\). Volviendo a la primera: \(k=c_1+c_3=0\).
+          <div class="why">El sistema solo tiene solución con \(k=0\). Eso significa que el único elemento de \(S\) que está en la imagen es el polinomio nulo: \(2+x\notin\mathrm{Im}(T)\). Comprobación: \((1,1,0)=a(1,1,-2)+b(0,1,1)\) da \(a=1\), \(b=0\), y entonces la tercera coordenada debería ser \(-2\neq0\).</div></li>
+        <li><b>Conclusión.</b> \(c=c_3(-1,-1,1)\), que son las coordenadas de los polinomios del núcleo. Entonces \(T^{-1}(S)=\mathrm{Nu}(T)\).
+          <div class="why">Control de dimensión: \(\dim T^{-1}(S)=\dim\mathrm{Nu}(T)+\dim(S\cap\mathrm{Im}T)=1+0=1\). Siempre vale \(\mathrm{Nu}(T)\subseteq T^{-1}(S)\), porque \(T(p)=0\in S\). Esta es la parte “media”: hay que darse cuenta de que la respuesta es solo el núcleo y justificarlo.</div></li>
+      </ol>
+      <div class="ans">\(T^{-1}(S)=\mathrm{Nu}(T)=\mathrm{gen}\{1-x-x^2\}\), base \(\{1-x-x^2\}\).</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="c-2"><div class="ex-h"><h3>Clase 19/11 · Ej. 2 <a class="pill" href="#modelo-2">Modelo 2</a> <span class="prio">Muy probable</span></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">Sea \(T:P_2\to P_2\) TL y \(B=\{1,\ 1+x,\ x^2\}\) base de \(P_2\), con \([T]_B=\begin{pmatrix}1&2&0\\0&1&1\\1&3&1\end{pmatrix}\).<br>a) Hallar bases de \(\mathrm{Nu}(T)\) e \(\mathrm{Im}(T)\). b) Determine, si es posible, todos los \(p\in P_2\) con \(T(p)=2+x+x^2\).</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <ol class="steps">
+        <li><b>Rango.</b> Fila 3 = fila 1 + fila 2, y las filas 1 y 2 son LI: rango 2. Por el teorema de la dimensión, \(\dim\mathrm{Im}=2\) y \(\dim\mathrm{Nu}=1\).</li>
+        <li><b>Núcleo.</b> Con las dos filas independientes: \(c_1+2c_2=0\), \(c_2+c_3=0\). Con \(c_3=t\): \(c_2=-t\), \(c_1=2t\). Coordenadas \((2,-1,1)\):
+          \[p=2\cdot1-(1+x)+x^2=1-x+x^2.\]
+          <div class="why">La tercera ecuación no aporta nada nuevo porque es la suma de las otras dos. Verificación: \([T]_B(2,-1,1)^T=(2-2,\ -1+1,\ 2-3+1)=(0,0,0)\). ✓</div></li>
+        <li><b>Imagen.</b> Columna 1 \((1,0,1)\to1+x^2\); columna 3 \((0,1,1)\to(1+x)+x^2\). Son LI. La columna 2 sobra: \((2,1,3)=2(1,0,1)+(0,1,1)\). Simplificando: \((1+x+x^2)-(1+x^2)=x\).</li>
+      </ol>
+      <div class="ans">\(B_{\mathrm{Nu}}=\{1-x+x^2\}\). \(B_{\mathrm{Im}}=\{1+x^2,\ x\}\) (o \(\{1+x^2,\ 1+x+x^2\}\)).</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <ol class="steps">
+        <li><b>Coordenadas del dato.</b> \(c_1+c_2(1+x)+c_3x^2=2+x+x^2\Rightarrow c_3=1\), \(c_2=1\), \(c_1+c_2=2\Rightarrow c_1=1\). Entonces \([2+x+x^2]_B=(1,1,1)\).</li>
+        <li><b>Sistema</b> \([T]_Bc=(1,1,1)^T\):
+          \[c_1+2c_2=1,\qquad c_2+c_3=1,\qquad c_1+3c_2+c_3=1.\]
+          Sumando las dos primeras queda \(c_1+3c_2+c_3=2\), que contradice la tercera (\(=1\)). Sistema incompatible.
+          <div class="why">El lado izquierdo de la fila 3 es la suma de las filas 1 y 2. Para que haya solución, el lado derecho tiene que cumplir lo mismo: \(1+1\) debería ser igual a \(1\). Como no lo es, \(2+x+x^2\notin\mathrm{Im}(T)\). Comprobación con la base de la imagen: \(2+x+x^2=a(1+x^2)+bx\) exige \(a=2\) (término independiente) y \(a=1\) (coeficiente de \(x^2\)): imposible.</div></li>
+      </ol>
+      <div class="ans">No existe ningún \(p\in P_2\) con \(T(p)=2+x+x^2\), porque \(2+x+x^2\notin\mathrm{Im}(T)\).</div>
+      <div class="trap">“Determine, si es posible” es una pista de que puede no haber solución. Si el sistema es incompatible, la respuesta es “no existen”, con la justificación.</div>
+    </div></details>
+  </div></div>
+
+  <!-- ===== MODELO 3 ===== -->
+  <h2>Modelo 3 · Autovalores y \(B=f(A)\)</h2>
+
+  <div class="ex" data-ex="f5-4"><div class="ex-h"><h3>Práctica · Ej. 4 <a class="pill" href="#modelo-3">Modelo 3</a> <span class="lvl mid">importante</span></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">Sea \(A=\begin{pmatrix}3&1&0\\1&3&0\\0&0&-2\end{pmatrix}\).<br>a) Halle los autovalores de \(A\) y una base de cada espacio propio. b) Sea \(B=A^6-5A^2\). Halle \(P\) inversible y \(D\) diagonal (con \(B=PDP^{-1}\)) sin calcular potencias de matrices.</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>Desarrollando por la fila 3 (o la columna 3), que tiene dos ceros:</p>
+      \[p_A(\lambda)=(-2-\lambda)\big[(3-\lambda)^2-1\big]=(-2-\lambda)(3-\lambda-1)(3-\lambda+1)=(-2-\lambda)(2-\lambda)(4-\lambda).\]
+      <div class="why">\((3-\lambda)^2-1\) es diferencia de cuadrados: \((3-\lambda-1)(3-\lambda+1)\). Control: \(-2+2+4=4=\mathrm{tr}(A)\) y \((-2)(2)(4)=-16=\det A\). ✓</div>
+      <p>Autovalores \(-2,\ 2,\ 4\), todos simples, así que cada espacio propio tiene dimensión 1.</p>
+      <ul>
+        <li>\(\lambda=-2\): \(A+2I=\begin{pmatrix}5&1&0\\1&5&0\\0&0&0\end{pmatrix}\Rightarrow x=y=0\), \(z\) libre. \(S_{-2}=\mathrm{gen}\{(0,0,1)\}\).</li>
+        <li>\(\lambda=2\): \(A-2I=\begin{pmatrix}1&1&0\\1&1&0\\0&0&-4\end{pmatrix}\Rightarrow z=0,\ x=-y\). \(S_2=\mathrm{gen}\{(1,-1,0)\}\).</li>
+        <li>\(\lambda=4\): \(A-4I=\begin{pmatrix}-1&1&0\\1&-1&0\\0&0&-6\end{pmatrix}\Rightarrow z=0,\ x=y\). \(S_4=\mathrm{gen}\{(1,1,0)\}\).</li>
+      </ul>
+      <div class="why">\(A\) es simétrica, y por eso los autovectores de autovalores distintos salen ortogonales entre sí. Sirve como control.</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p>\(B=q(A)\) con \(q(t)=t^6-5t^2\). Si \(Av=\lambda v\), entonces \(A^kv=\lambda^kv\) y</p>
+      \[Bv=A^6v-5A^2v=(\lambda^6-5\lambda^2)\,v.\]
+      <ul>
+        <li>\(\lambda=-2\): \(64-20=44\).</li>
+        <li>\(\lambda=2\): \(64-20=44\).</li>
+        <li>\(\lambda=4\): \(4096-80=4016\).</li>
+      </ul>
+      <div class="why">\(A\) tiene 3 autovalores distintos, así que sus autovectores forman una base de \(\mathbb R^3\). Esos mismos vectores son autovectores de \(B\), entonces \(B\) es diagonalizable con la misma \(P\). Detalle: \(B\) tiene el autovalor \(44\) <b>doble</b> aunque \(A\) no tenía autovalores repetidos, porque \(q(-2)=q(2)\). No cambia nada, ya tenemos la base de autovectores.</div>
+      <div class="ans">\(P=\begin{pmatrix}0&1&1\\0&-1&1\\1&0&0\end{pmatrix}\), \(D=\mathrm{diag}(44,\ 44,\ 4016)\), \(B=PDP^{-1}\). Desarrollando por la fila 3: \(\det P=1\cdot\big(1\cdot1-1\cdot(-1)\big)=2\neq0\), así que \(P\) es inversible.</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="f4-1"><div class="ex-h"><h3>Práctica · Ej. 1 (\(B=5A^{-1}+2I\)) <a class="pill" href="#modelo-3">Modelo 3</a> <span class="lvl mid">importante</span></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">\(A=\begin{pmatrix}5&0&0\\-1&3&-1\\-2&-4&3\end{pmatrix}\), \(B=5A^{-1}+2I\). a) Hallar los autoespacios \(S_{\lambda=1}\) y \(S_{\lambda=5}\) (\(\lambda=5\) es raíz doble de \(p_A\)). b) Sin calcular \(B\), determine si es posible \(P\) inversible y \(D\) diagonal con \(B=PDP^{-1}\). No es necesario hallar \(P^{-1}\).</div>
+    <details class="sol"><summary>Resolución</summary><div>
+      <p>Es el ejercicio 3 del <a href="#p-2019">parcial 2019</a>. Resumen:</p>
+      <ol class="steps">
+        <li>\(\lambda=5\) (doble): \(A-5I\) tiene rango 1, así que \(\dim S_5=2\). Ecuación \(x+2y+z=0\): \(S_5=\mathrm{gen}\{(-2,1,0),(-1,0,1)\}\).</li>
+        <li>\(\lambda=1\): \(x=0\), \(z=2y\): \(S_1=\mathrm{gen}\{(0,1,2)\}\).</li>
+        <li>0 no es autovalor, así que \(A\) es inversible. \(Av=\lambda v\Rightarrow Bv=\big(\tfrac5\lambda+2\big)v\): \(5\to3\), \(1\to7\).</li>
+        <li>\(\dim S_5+\dim S_1=3\): los autovectores de \(A\) son una base de \(\mathbb R^3\) y también son autovectores de \(B\).</li>
+      </ol>
+      <div class="ans">\(P=\begin{pmatrix}-2&-1&0\\1&0&1\\0&1&2\end{pmatrix}\), \(D=\mathrm{diag}(3,3,7)\).</div>
+    </div></details>
+  </div></div>
+
+  <!-- ===== MODELO 4 ===== -->
+  <h2>Modelo 4 · Producto interno</h2>
+
+  <div class="ex" data-ex="f2-4"><div class="ex-h"><h3>Práctica · Ej. 4 (\(\mathbb R^4\)) <a class="pill" href="#modelo-4">Modelo 4</a> <span class="prio">Muy probable</span></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">En \(\mathbb R^4\) con el producto escalar usual, sea \(S=\mathrm{gen}\{(1,1,0,0)^T,(0,1,0,1)^T\}\).<br>a) Halle una base del complemento ortogonal de \(S\) <span class="lvl easy">fácil</span>. b) Dado \(w=(1,2,1,1)^T\), calcule \(\mathrm{dist}(w,S)\) <span class="lvl mid">media</span>.</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>\(\dim S=2\) (los generadores no son proporcionales), así que \(\dim S^\perp=4-2=2\). Alcanza con imponer ortogonalidad a los dos generadores: \(v=(x,y,z,t)\in S^\perp\iff\)</p>
+      \[\langle v,(1,1,0,0)\rangle=x+y=0,\qquad\langle v,(0,1,0,1)\rangle=y+t=0.\]
+      <p>\(x=-y\), \(t=-y\), \(z\) libre: \(v=y(-1,1,0,-1)+z(0,0,1,0)\).</p>
+      <div class="why">Por linealidad del producto interno, si \(v\) es ortogonal a cada generador, es ortogonal a cualquier combinación de ellos, es decir a todo \(S\). Dos variables libres coincide con \(\dim S^\perp=2\).</div>
+      <div class="ans">\(B_{S^\perp}=\{(-1,1,0,-1),\ (0,0,1,0)\}\).</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p><b>Idea.</b> Por el teorema de descomposición, \(w=P_S(w)+P_{S^\perp}(w)\) y \(\mathrm{dist}(w,S)=\|w-P_S(w)\|=\|P_{S^\perp}(w)\|\).</p>
+      <div class="why">Para proyectar con la fórmula hace falta una base ortogonal. La base de \(S\) no lo es: \(\langle(1,1,0,0),(0,1,0,1)\rangle=1\neq0\). La de \(S^\perp\) que encontramos sí lo es: \(\langle(-1,1,0,-1),(0,0,1,0)\rangle=0\). Entonces conviene proyectar sobre \(S^\perp\) y nos ahorramos Gram–Schmidt.</div>
+      <p>Con \(e_1=(-1,1,0,-1)\), \(e_2=(0,0,1,0)\):</p>
+      \[\langle w,e_1\rangle=-1+2+0-1=0,\qquad\langle w,e_2\rangle=1,\qquad\|e_2\|^2=1.\]
+      \[P_{S^\perp}(w)=\frac{0}{3}e_1+\frac11e_2=(0,0,1,0).\]
+      <p>\(\mathrm{dist}(w,S)=\|(0,0,1,0)\|=1\).</p>
+      <div class="why">Control: \(P_S(w)=w-P_{S^\perp}(w)=(1,2,0,1)=(1,1,0,0)+(0,1,0,1)\in S\). ✓</div>
+      <details class="sol"><summary>Camino alternativo: proyectar sobre \(S\) con Gram–Schmidt</summary><div>
+        <p>\(u_1=(1,1,0,0)\); \(u_2=(0,1,0,1)-\frac{1}{2}(1,1,0,0)=(-\tfrac12,\tfrac12,0,1)\), o \((-1,1,0,2)\) multiplicando por 2.</p>
+        <p>\(P_S(w)=\frac{\langle w,u_1\rangle}{\|u_1\|^2}u_1+\frac{\langle w,u_2\rangle}{\|u_2\|^2}u_2=\frac32(1,1,0,0)+\frac{3}{6}(-1,1,0,2)=(1,2,0,1)\).</p>
+        <p>\(w-P_S(w)=(0,0,1,0)\), norma 1. Mismo resultado con más cuentas.</p>
+      </div></details>
+      <div class="ans">\(\mathrm{dist}(w,S)=1\).</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="c-3"><div class="ex-h"><h3>Clase 19/11 · Ej. 3 <a class="pill" href="#modelo-4">Modelo 4</a> <span class="prio">Muy probable</span></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">En \(P_2\) se define \(\langle p,q\rangle=ac+bd+ef\), donde \(p(x)=a+bx+ex^2\), \(q(x)=c+dx+fx^2\). Sea \(S=\{p\in P_2:\ p(1)=p'(0)\}\).<br>a) Determine \(\alpha,\beta\in\mathbb R\) para que \(\{1+x-x^2,\ \alpha+2x+\beta x^2\}\) sea una base ortogonal de \(S\). b) Halle la proyección ortogonal de \(q(x)=1+2x+x^2\) sobre \(S\).<br><span class="uses">En tus notas dice “En \(\mathbb R^3\)”, pero los elementos son polinomios: el espacio es \(P_2\).</span></div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <ol class="steps">
+        <li><b>Describir \(S\).</b> Con \(p=a+bx+ex^2\): \(p(1)=a+b+e\), \(p'(0)=b\). Entonces \(p(1)=p'(0)\iff a+e=0\). \(S=\{a+bx-ax^2\}=\mathrm{gen}\{1-x^2,\ x\}\), \(\dim S=2\).
+          <div class="why">Una sola ecuación en un espacio de dimensión 3 deja un subespacio de dimensión 2. Una base ortogonal de \(S\) necesita exactamente 2 vectores.</div></li>
+        <li><b>Condición de pertenencia.</b> \(1+x-x^2\in S\) porque \(1+(-1)=0\). ✓ Para el segundo: \(\alpha+\beta=0\).</li>
+        <li><b>Condición de ortogonalidad.</b> \(\langle1+x-x^2,\ \alpha+2x+\beta x^2\rangle=1\cdot\alpha+1\cdot2+(-1)\cdot\beta=\alpha+2-\beta=0\).</li>
+        <li><b>Resolver.</b> \(\beta=-\alpha\) y \(\alpha+2+\alpha=0\Rightarrow\alpha=-1\), \(\beta=1\). El segundo vector es \(-1+2x+x^2\).
+          <div class="why">Son dos vectores no nulos de \(S\) y ortogonales entre sí, así que son LI (todo conjunto ortogonal de vectores no nulos es LI). Como \(\dim S=2\), son base. Verificación: \(\langle1+x-x^2,-1+2x+x^2\rangle=-1+2-1=0\). ✓</div></li>
+      </ol>
+      <div class="ans">\(\alpha=-1\), \(\beta=1\). Base ortogonal de \(S\): \(\{1+x-x^2,\ -1+2x+x^2\}\).</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p>Con la base ortogonal \(u_1=1+x-x^2\), \(u_2=-1+2x+x^2\) usamos la fórmula de proyección:</p>
+      \[\langle q,u_1\rangle=1+2-1=2,\quad\|u_1\|^2=3;\qquad\langle q,u_2\rangle=-1+4+1=4,\quad\|u_2\|^2=6.\]
+      \[P_S(q)=\frac23(1+x-x^2)+\frac46(-1+2x+x^2)=\frac23\big[(1+x-x^2)+(-1+2x+x^2)\big]=\frac23\cdot3x=2x.\]
+      <div class="why">La fórmula \(P_S(v)=\sum\frac{\langle v,u_i\rangle}{\langle u_i,u_i\rangle}u_i\) solo vale con una base <b>ortogonal</b>. Por eso la parte a) va primero.</div>
+      <p><b>Control.</b> \(q-P_S(q)=1+x^2\) tiene que estar en \(S^\perp\). La ecuación de \(S\) es \(a+e=0\), que es \(\langle p,\ 1+x^2\rangle=0\), así que \(S^\perp=\mathrm{gen}\{1+x^2\}\). ✓ De paso, \(\mathrm{dist}(q,S)=\|1+x^2\|=\sqrt2\).</p>
+      <div class="ans">\(P_S(q)=2x\).</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="n-2c4"><div class="ex-h"><h3>2024 2C · Ej. 4 (de tus apuntes) <a class="pill" href="#modelo-4">Modelo 4</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">En \(\mathbb R^{2\times2}\) con \(\langle A,B\rangle=\mathrm{tr}(A^TB)\), sea \(S=\{A\in\mathbb R^{2\times2}:A=A^T\}\). a) Encuentre \(S^\perp\) y una base. b) Dada \(B=\begin{pmatrix}2&1\\0&1\end{pmatrix}\), halle la proyección de \(B\) sobre \(S\) y \(\mathrm{dist}(B,S)\).<br><span class="uses">Enunciado reconstruido a partir de tu resolución manuscrita.</span></div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>\(S\) son las simétricas: \(A=\begin{pmatrix}r&s\\s&t\end{pmatrix}\), \(\dim S=3\), así que \(\dim S^\perp=4-3=1\).</p>
+      <p>\(X=\begin{pmatrix}a&b\\c&d\end{pmatrix}\in S^\perp\iff\langle X,A\rangle=ra+s(b+c)+td=0\) para todo \(r,s,t\iff a=0,\ d=0,\ c=-b\).</p>
+      <div class="why">\(\mathrm{tr}(X^TA)\) es la suma de productos entrada a entrada. Para que la expresión sea 0 para todos los \(r,s,t\), los coeficientes tienen que ser 0. Resultado: el complemento de las simétricas son las antisimétricas.</div>
+      <div class="ans">\(S^\perp=\mathrm{gen}\left\{\begin{pmatrix}0&1\\-1&0\end{pmatrix}\right\}\).</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p>\(S^\perp\) tiene dimensión 1, así que es más corto proyectar sobre \(S^\perp\). Con \(K=\begin{pmatrix}0&1\\-1&0\end{pmatrix}\): \(\langle B,K\rangle=2\cdot0+1\cdot1+0\cdot(-1)+1\cdot0=1\), \(\|K\|^2=2\).</p>
+      \[P_{S^\perp}(B)=\tfrac12K=\begin{pmatrix}0&\tfrac12\\-\tfrac12&0\end{pmatrix},\qquad P_S(B)=B-P_{S^\perp}(B)=\begin{pmatrix}2&\tfrac12\\\tfrac12&1\end{pmatrix}.\]
+      <div class="why">\(P_S(B)\) es simétrica (está en \(S\)) y coincide con \(\frac{B+B^T}{2}\). Tu resolución llega a lo mismo planteando \(B-P_S(B)=\alpha K\) y pidiendo que \(P_S(B)\) sea simétrica (\(\alpha=-\tfrac12\) con tu signo de \(K\)).</div>
+      <p>\(\mathrm{dist}(B,S)=\|P_{S^\perp}(B)\|=\sqrt{\mathrm{tr}(R^TR)}\) con \(R=\tfrac12K\): \(R^TR=\mathrm{diag}(\tfrac14,\tfrac14)\), traza \(\tfrac12\).</p>
+      <div class="ans">\(P_S(B)=\begin{pmatrix}2&1/2\\1/2&1\end{pmatrix}\), \(\mathrm{dist}(B,S)=\sqrt{1/2}=\tfrac{\sqrt2}{2}\).</div>
+    </div></details>
+  </div></div>
+
+  <!-- ===== MODELO 5 ===== -->
+  <h2>Modelo 5 · Teórico</h2>
+
+  <div class="ex" data-ex="f1-5"><div class="ex-h"><h3>Práctica · Ej. 5 <a class="pill" href="#modelo-5">Modelo 5</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">a) Sean \(B=\{v_1,v_2,v_3\}\) base de \(\mathbb R^3\) y \(A\in\mathbb R^{3\times3}\) con \(A(v_1+v_2)=v_1+2v_2\), \(A(v_1-v_2)=v_1-2v_2\), \(Av_3=0\). Halle autovalores y espacios propios de \(A\) <span class="lvl hard">difícil</span>.<br>b) V o F: \(V\) real con producto interno. Si \(\{v_1,v_2,v_3\}\) es ortonormal, entonces \(\{v_1+v_3,\ v_1+v_2-v_3,\ v_1-2v_2+v_3\}\) es ortogonal <span class="lvl easy">fácil</span>.</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p><b>Idea clave.</b> Los datos están dados en \(v_1+v_2\) y \(v_1-v_2\). Sumando y restando se obtiene \(A\) en cada vector de la base, y ahí aparecen los autovalores.</p>
+      <ol class="steps">
+        <li><b>Sumar:</b> \(A(v_1+v_2)+A(v_1-v_2)=A(2v_1)=2v_1\Rightarrow Av_1=v_1\).
+          <div class="why">Por linealidad, \(A(v_1+v_2)+A(v_1-v_2)=A\big((v_1+v_2)+(v_1-v_2)\big)=A(2v_1)\). Del otro lado: \((v_1+2v_2)+(v_1-2v_2)=2v_1\).</div></li>
+        <li><b>Restar:</b> \(A(v_1+v_2)-A(v_1-v_2)=A(2v_2)=4v_2\Rightarrow Av_2=2v_2\).</li>
+        <li><b>Leer:</b> \(Av_1=1\cdot v_1\), \(Av_2=2\cdot v_2\), \(Av_3=0\cdot v_3\). Como \(v_1,v_2,v_3\) son de una base, son no nulos: son autovectores de los autovalores \(1\), \(2\) y \(0\).
+          <div class="why">La definición pide \(v\neq0\) con \(Av=\lambda v\). Un vector de una base nunca es nulo.</div></li>
+        <li><b>No hay más.</b> Una matriz \(3\times3\) tiene a lo sumo 3 autovalores. Ya hay 3 distintos, así que cada uno tiene \(m.a.=m.g.=1\) y su espacio propio tiene dimensión 1, generado por el autovector encontrado.</li>
+      </ol>
+      <div class="ans">Autovalores \(0,1,2\). \(S_1=\mathrm{gen}\{v_1\}\), \(S_2=\mathrm{gen}\{v_2\}\), \(S_0=\mathrm{gen}\{v_3\}\). Además \(A\) es diagonalizable: con \(P=(v_1\,|\,v_2\,|\,v_3)\), \(A=P\,\mathrm{diag}(1,2,0)\,P^{-1}\).</div>
+      <div class="why">Por qué parece difícil: no hay ninguna matriz para calcular \(\det(A-\lambda I)\). Cuando los datos vienen como “\(A\) aplicada a combinaciones de la base”, buscá despejar \(Av_i\) para cada \(v_i\). Si da un múltiplo de \(v_i\), encontraste un autovector.</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p>Se calcula cada producto con bilinealidad, usando \(\langle v_i,v_j\rangle=0\) si \(i\neq j\) y \(\langle v_i,v_i\rangle=1\). Basta con multiplicar los coeficientes que van con el mismo \(v_i\) y sumar:</p>
+      \[\langle v_1+v_3,\ v_1+v_2-v_3\rangle=1\cdot1+0\cdot1+1\cdot(-1)=0\ \checkmark\]
+      \[\langle v_1+v_3,\ v_1-2v_2+v_3\rangle=1\cdot1+0\cdot(-2)+1\cdot1=2\neq0.\]
+      <div class="ans">Falso: \(v_1+v_3\) y \(v_1-2v_2+v_3\) no son ortogonales (su producto es 2). También falla el tercer par: \(\langle v_1+v_2-v_3,\ v_1-2v_2+v_3\rangle=1-2-1=-2\).</div>
+      <div class="trap">Es fácil confundirlo con el parecido de 2019, que daba verdadero. Hay que calcular los tres pares; con que falle uno ya es falso. Como contraejemplo concreto: \(v_1,v_2,v_3\) la base canónica de \(\mathbb R^3\) da \((1,0,1)\cdot(1,-2,1)=2\).</div>
+    </div></details>
+  </div></div>
+</section>
+
+<!-- ============================ RESUMEN ============================ -->
+<section class="view" id="v-resumen">
+  <h1>Resumen rápido</h1>
+  <p class="lead">Tu resumen manuscrito pasado en limpio, con una corrección marcada. Para repasar la noche anterior.</p>
+
+  <h2>1 · Transformaciones lineales</h2>
+  <div class="grid">
+    <div class="card"><h3>Definición</h3>\(T(\alpha u+\beta v)=\alpha T(u)+\beta T(v)\) para todo \(u,v\in V\), \(\alpha,\beta\in\mathbb R\). Consecuencias: \(T(0)=0\), \(T(-v)=-T(v)\).</div>
+    <div class="card"><h3>Base ⇒ TL</h3>Una TL queda determinada por sus valores en una base: si \(v=a_1v_1+\dots+a_nv_n\), entonces \(T(v)=a_1T(v_1)+\dots+a_nT(v_n)\).</div>
+    <div class="card"><h3>Nu e Im</h3>\(\mathrm{Nu}(T)\subseteq V\) (dominio), \(\mathrm{Im}(T)\subseteq W\) (codominio). Si \(\{v_i\}\) es base del dominio, \(\mathrm{Im}=\mathrm{gen}\{T(v_i)\}\).</div>
+    <div class="card"><h3>Teorema de la dimensión</h3>\(\dim\mathrm{Nu}(T)+\dim\mathrm{Im}(T)=\dim V\). \(\dim\mathrm{Im}(T)=\mathrm{rg}(T)\).</div>
+    <div class="card"><h3>Mono / epi / iso</h3>Mono: \(\mathrm{Nu}=\{0\}\). Epi: \(\mathrm{Im}=W\). Iso: ambas. Con \(\dim V=\dim W=n\): las tres son equivalentes y equivalen a \(\det[T]\neq0\).</div>
+    <div class="card"><h3>Coordenadas</h3>\([T(v)]_C=[T]_{CB}[v]_B\). Columnas de \([T]_{CB}\): \([T(b_i)]_C\). Si \([p]_B=(u,v,w)\), entonces \(p=ub_1+vb_2+wb_3\).</div>
+    <div class="card"><h3>Ecuación \(T(v)=w\)</h3>\(v=v_0+z\), \(z\in\mathrm{Nu}(T)\). No hay solución si \(w\notin\mathrm{Im}(T)\).</div>
+    <div class="card"><h3>Composición</h3>\([S\circ T]=[S][T]\), \([T^2]=[T]^2\). \(\mathrm{Nu}(F)\subseteq\mathrm{Nu}(F^2)\), \(\mathrm{Im}(F^2)\subseteq\mathrm{Im}(F)\). \(T^{-1}\) existe solo si \(T\) es iso.</div>
+  </div>
+
+  <h2>2 · Autovalores y diagonalización</h2>
+  <div class="grid">
+    <div class="card"><h3>Definición</h3>\(\lambda\) es autovalor si existe \(v\neq0\) con \(Av=\lambda v\). Se obtienen con \(\det(A-\lambda I)=0\). \(S_\lambda=\mathrm{Nu}(A-\lambda I)\).</div>
+    <div class="card"><h3>Multiplicidades</h3>\(m.a.\): veces que \(\lambda\) es raíz de \(p_A\). \(m.g.=\dim S_\lambda=n-\mathrm{rg}(A-\lambda I)\). \(1\le m.g.\le m.a.\)</div>
+    <div class="card"><h3>Diagonalizable</h3>\(A=PDP^{-1}\) \(\iff\) \(n\) autovectores LI \(\iff\) \(\sum\dim S_{\lambda_i}=n\). \(n\) autovalores distintos es condición suficiente.</div>
+    <div class="card"><h3>\(P\) y \(D\)</h3>\(P\): autovectores LI en columnas. \(D\): autovalores en el mismo orden.</div>
+    <div class="card"><h3>Funciones de A</h3>\(A^kv=\lambda^kv\), \((A-aI)^kv=(\lambda-a)^kv\), \(A^{-1}v=\tfrac1\lambda v\).</div>
+    <div class="card"><h3>Traza y det</h3>\(\mathrm{tr}A=\sum\lambda_i\), \(\det A=\prod\lambda_i\), \(\mathrm{tr}(A^k)=\sum\lambda_i^k\neq(\mathrm{tr}A)^k\). \(A\) inversible \(\iff 0\) no es autovalor.</div>
+    <div class="card"><h3>Semejantes</h3>\(B=CAC^{-1}\): mismo polinomio característico, autovalores, multiplicidades algebraicas, traza, determinante y rango.</div>
+  </div>
+
+  <h2>3 · Producto interno y ortogonalidad</h2>
+  <div class="grid">
+    <div class="card"><h3>Axiomas</h3>Simetría \(\langle u,v\rangle=\langle v,u\rangle\); linealidad \(\langle au+bv,w\rangle=a\langle u,w\rangle+b\langle v,w\rangle\); \(\langle u,u\rangle\ge0\) y \(=0\iff u=0\).</div>
+    <div class="card"><h3>Norma y distancia</h3>\(\|v\|=\sqrt{\langle v,v\rangle}\), \(\|\alpha v\|=|\alpha|\|v\|\), \(\mathrm{dist}(u,v)=\|u-v\|\).</div>
+    <div class="card"><h3>Desigualdades</h3>Cauchy–Schwarz \(|\langle u,v\rangle|\le\|u\|\|v\|\), con igualdad \(\iff\) <b>LD</b> <span class="fix">(tus notas dicen LI)</span>. Triangular \(\|u+v\|\le\|u\|+\|v\|\).</div>
+    <div class="card"><h3>Ortogonalidad</h3>\(u\perp v\iff\langle u,v\rangle=0\iff\|u+v\|^2=\|u\|^2+\|v\|^2\) (real). Un conjunto ortogonal de vectores no nulos es LI. Ortonormal: además, norma 1.</div>
+    <div class="card"><h3>Complemento</h3>\(S^\perp=\{v:\langle v,s\rangle=0\ \forall s\in S\}\). Alcanza con una base de \(S\). \(\dim S+\dim S^\perp=\dim V\), \(S\cap S^\perp=\{0\}\), \((S^\perp)^\perp=S\).</div>
+    <div class="card"><h3>Descomposición</h3>\(V=S\oplus S^\perp\): \(v=P_S(v)+(v-P_S(v))\). \(P_{S^\perp}(v)=v-P_S(v)\), \(\mathrm{dist}(v,S)=\|v-P_S(v)\|\).</div>
+    <div class="card"><h3>Proyección</h3>Base ortogonal \(\{u_i\}\): \(P_S(v)=\sum\frac{\langle v,u_i\rangle}{\langle u_i,u_i\rangle}u_i\). Ortonormal: \(P_S(v)=\sum\langle v,u_i\rangle u_i\).</div>
+    <div class="card"><h3>Polarización</h3>\(\langle u,v\rangle=\dfrac{\|u+v\|^2-\|u-v\|^2}{4}\). Desarrollo: \(\|u+v\|^2=\|u\|^2+2\langle u,v\rangle+\|v\|^2\).</div>
+  </div>
+</section>
+
+<!-- ============================ TEORÍA 1 ============================ -->
+<section class="view" id="v-t-tl">
+  <h1>1 · Transformaciones lineales</h1>
+  <p class="lead">Base de los modelos 1 y 2. Fuente: Notas de TL y Guía 3.</p>
+
+  <div class="def"><b class="lbl">Definición</b>Sean \(V,W\) espacios vectoriales sobre \(\mathbb K\). \(T:V\to W\) es <b>transformación lineal</b> si para todo \(u,v\in V\) y \(\alpha\in\mathbb K\):
+  \[ T(u+v)=T(u)+T(v) \qquad T(\alpha u)=\alpha\,T(u). \]
+  Equivalente (una sola condición): \(T(\alpha u+\beta v)=\alpha T(u)+\beta T(v)\).</div>
+
+  <div class="thm"><b class="lbl">Propiedades</b>
+  <ul>
+    <li>\(T(0_V)=0_W\). Si \(T(0)\neq0\), <b>no</b> es TL (sirve para descartar rápido, por ejemplo \(T(x,y)=(1,y)\)).</li>
+    <li>\(T(\alpha_1v_1+\dots+\alpha_rv_r)=\alpha_1T(v_1)+\dots+\alpha_rT(v_r)\).</li>
+  </ul></div>
+
+  <div class="thm"><b class="lbl">Teorema de existencia y unicidad</b>Si \(\{v_1,\dots,v_n\}\) es base de \(V\) y \(w_1,\dots,w_n\in W\) son cualesquiera, existe una <b>única</b> TL con \(T(v_i)=w_i\). Una TL queda determinada por lo que hace en una base.</div>
+  <p class="uses">Se usa en: <a class="pill" href="#modelo-2">Modelo 2</a> (cuando la TL viene dada por condiciones, como \(F(v_2)=4v_3-2v_1\)).</p>
+
+  <h2>Núcleo e imagen</h2>
+  <div class="def"><b class="lbl">Definición</b>
+  \(\mathrm{Nu}(T)=\{v\in V: T(v)=0_W\}\subseteq V\) &nbsp;&nbsp; \(\mathrm{Im}(T)=\{w\in W:\exists v\in V,\ T(v)=w\}\subseteq W\).<br>Ambos son subespacios.</div>
+  <div class="thm"><b class="lbl">Generadores de la imagen</b>Si \(\{v_1,\dots,v_n\}\) genera \(V\), entonces \(\{T(v_1),\dots,T(v_n)\}\) genera \(\mathrm{Im}(T)\). Después se eliminan los que sobran para obtener una base.</div>
+  <div class="thm"><b class="lbl">Teorema de la dimensión</b>Si \(\dim V\) es finita:
+  \[ \dim V=\dim\mathrm{Nu}(T)+\dim\mathrm{Im}(T). \]</div>
+  <div class="why">Este teorema permite <b>anticipar</b> dimensiones. Si encontrás \(\dim\mathrm{Nu}=1\) en \(P_2\), ya sabés que \(\dim\mathrm{Im}=2\), y te alcanza con encontrar dos vectores LI en la imagen. En el parcial, escribí explícitamente “por el teorema de la dimensión”.</div>
+
+  <h2>Mono, epi, iso</h2>
+  <div class="def"><b class="lbl">Definición</b>
+  <b>Monomorfismo</b>: inyectiva. <b>Epimorfismo</b>: sobreyectiva (\(\mathrm{Im}(T)=W\)). <b>Isomorfismo</b>: biyectiva.</div>
+  <div class="thm"><b class="lbl">Proposición</b>
+  <ul>
+    <li>\(T\) es monomorfismo \(\iff \mathrm{Nu}(T)=\{0_V\}\).</li>
+    <li>Si \(\dim V=\dim W\) (finita): \(T\) mono \(\iff\) \(T\) epi \(\iff\) \(T\) iso.</li>
+    <li>Si \(\dim V>\dim W\), \(T\) no puede ser mono. Si \(\dim V&lt;\dim W\), no puede ser epi.</li>
+    <li>\(T\) es iso \(\iff\) su matriz asociada (en cualesquiera bases) es inversible \(\iff \det[T]\neq0\).</li>
+  </ul></div>
+  <div class="notes"><b class="lbl">De tus apuntes · cuadro resumen</b>
+    <div class="tw"><table>
+      <thead><tr><th>\(T:V\to W\) es…</th><th>Significa</th><th>Condición</th></tr></thead>
+      <tbody>
+        <tr><td>Monomorfismo</td><td>Inyectiva</td><td>\(\mathrm{Nu}(T)=\{0\}\)</td></tr>
+        <tr><td>Epimorfismo</td><td>Sobreyectiva</td><td>\(\mathrm{Im}(T)=W\), o sea \(\dim\mathrm{Im}(T)=\dim W\)</td></tr>
+        <tr><td>Isomorfismo</td><td>Las dos</td><td>Las dos condiciones</td></tr>
+      </tbody>
+    </table></div>
+    Si \(\dim V=\dim W=n\): inyectiva \(\iff\) sobreyectiva \(\iff\) isomorfismo \(\iff\) su matriz tiene rango \(n\) \(\iff\) \(\det\neq0\).<br>
+    Dimensiones que conviene tener a mano: \(\dim P_2=3\), \(\dim\mathbb R^3=3\), \(\dim\mathbb R^{2\times2}=4\), \(\dim P_n=n+1\).
+  </div>
+  <div class="notes"><b class="lbl">De tus apuntes · cómo traducir lo que te piden</b>
+    <div class="tw"><table>
+      <thead><tr><th>Si te dicen…</th><th>Con la matriz \(A=[T]\) se traduce como…</th></tr></thead>
+      <tbody>
+        <tr><td>\(v\in\mathrm{Nu}(T)\)</td><td>\(A[v]=0\)</td></tr>
+        <tr><td>\(w\in\mathrm{Im}(T)\)</td><td>\(A[v]=[w]\) tiene solución</td></tr>
+        <tr><td>Hallar todos los \(v\) con \(T(v)=w\)</td><td>Resolver \(A[v]=[w]\): solución particular + \(\mathrm{Nu}(T)\)</td></tr>
+        <tr><td>\(T\circ T\)</td><td>\(A^2\) (misma base). \([S\circ T]=[S][T]\)</td></tr>
+        <tr><td>\(T\circ T\) es isomorfismo</td><td>\(A^2\) inversible (equivale a \(A\) inversible)</td></tr>
+        <tr><td>\(T^{-1}\)</td><td>Existe solo si \(T\) es iso; \([T^{-1}]=A^{-1}\), \(T^{-1}(T(v))=v\)</td></tr>
+      </tbody>
+    </table></div>
+    También: \(\mathrm{Nu}(F)\subseteq\mathrm{Nu}(F^2)\) e \(\mathrm{Im}(F^2)\subseteq\mathrm{Im}(F)\). Ejemplo: \(F(x,y)=(y,0)\) cumple \(F(3,2)=(2,0)\) y \(F^2(3,2)=(0,0)\).
+  </div>
+  <div class="why">En el modelo 1 casi siempre \(\dim V=\dim W=3\) (\(P_2\) y \(\mathbb R^3\)). Entonces basta con estudiar el núcleo: si \(\mathrm{Nu}(T)=\{0\}\) es iso; si encontrás un \(p\neq0\) con \(T(p)=0\), no lo es.</div>
+
+  <h2>Imagen y preimagen de un subespacio</h2>
+  <div class="def"><b class="lbl">Definición</b>\(T(S)=\{T(v):v\in S\}\) &nbsp;&nbsp; \(T^{-1}(H)=\{v\in V:T(v)\in H\}\). Ambos son subespacios.</div>
+  <div class="thm"><b class="lbl">Cómo se calculan</b>Si \(S=\mathrm{gen}\{s_1,\dots,s_k\}\), entonces \(T(S)=\mathrm{gen}\{T(s_1),\dots,T(s_k)\}\). Para \(T^{-1}(H)\) se plantea la condición \(T(v)\in H\) como sistema. Siempre vale \(\mathrm{Nu}(T)\subseteq T^{-1}(H)\).</div>
+  <p class="uses">Practicar: Guía 3, ej. 2, 12, 13, 14, 15, 16, 25.</p>
+</section>
+
+<!-- ============================ TEORÍA 2 ============================ -->
+<section class="view" id="v-t-matriz">
+  <h1>2 · Matriz asociada a una TL</h1>
+  <p class="lead">Es el corazón del modelo 2: casi todos los errores vienen de confundir coordenadas con vectores.</p>
+
+  <div class="def"><b class="lbl">Definición</b>Sean \(B_1=\{v_1,\dots,v_n\}\) base de \(V\) y \(B_2\) base de \(W\). La matriz \([T]_{B_1B_2}\in\mathbb K^{m\times n}\) tiene como columna \(j\) las coordenadas de \(T(v_j)\) en la base \(B_2\):
+  \[ [T]_{B_1B_2}=\Big(\,[T(v_1)]_{B_2}\ \Big|\ \cdots\ \Big|\ [T(v_n)]_{B_2}\Big). \]
+  Si \(V=W\) y se usa la misma base, se escribe \([T]_B\).</div>
+  <div class="thm"><b class="lbl">Propiedad fundamental</b>\[ [T]_{B_1B_2}\,[v]_{B_1}=[T(v)]_{B_2}\quad\text{para todo } v\in V. \]</div>
+  <div class="why">Esta igualdad transforma cualquier pregunta sobre la TL en un sistema de ecuaciones con la matriz. Pero lo que entra y sale son <b>coordenadas</b>, no los vectores (polinomios). Por eso hay que traducir antes y después.</div>
+
+  <div class="thm"><b class="lbl">Rango y dimensiones</b>
+  \(\dim\mathrm{Im}(T)=\mathrm{rango}\,[T]_{B_1B_2}\) y \(\dim\mathrm{Nu}(T)=n-\mathrm{rango}\,[T]_{B_1B_2}\), en cualquier par de bases.</div>
+
+  <h3>Traducción coordenadas ↔ vectores</h3>
+  <ul>
+    <li>Si \([p]_B=(c_1,c_2,c_3)\) con \(B=\{b_1,b_2,b_3\}\), entonces \(p=c_1b_1+c_2b_2+c_3b_3\).</li>
+    <li>Para obtener \([q]_B\) de un \(q\) dado, se resuelve \(c_1b_1+c_2b_2+c_3b_3=q\).</li>
+  </ul>
+  <div class="trap">En 2024 y en el parcial viejo se pide \(T(p)=4\). Las coordenadas de \(4\) en \(B\) <b>no</b> son \((4,0,0)\): hay que calcularlas (por ejemplo, \(4=(2-x)+(2+x)\) da \((1,1,0)\)).</div>
+
+  <div class="notes"><b class="lbl">De tus apuntes · ejemplo completo en \(\mathbb R^2\)</b>
+    \(T(x,y)=(x+y,\ 2x)\), \(B=\{(1,1),(1,-1)\}\), \(C=\{(1,0),(0,2)\}\). Se busca \([T]_{CB}\), que recibe coordenadas en \(B\) y devuelve coordenadas en \(C\).
+    <ol class="steps">
+      <li>Aplicar \(T\) a la base de salida: \(T(1,1)=(2,2)\), \(T(1,-1)=(0,2)\).</li>
+      <li>Expresar los resultados en la base de llegada: \((2,2)=2(1,0)+1(0,2)\Rightarrow[T(1,1)]_C=(2,1)\); \((0,2)=0(1,0)+1(0,2)\Rightarrow[T(1,-1)]_C=(0,1)\).</li>
+      <li>Ponerlos como columnas: \([T]_{CB}=\begin{pmatrix}2&0\\1&1\end{pmatrix}\).</li>
+      <li>Usarla: \(v=(3,1)=2(1,1)+1(1,-1)\Rightarrow[v]_B=(2,1)\). \([T(v)]_C=\begin{pmatrix}2&0\\1&1\end{pmatrix}\begin{pmatrix}2\\1\end{pmatrix}=\begin{pmatrix}4\\3\end{pmatrix}\).</li>
+      <li>Reconstruir con \(C\): \(T(v)=4(1,0)+3(0,2)=(4,6)\). Control directo: \(T(3,1)=(4,6)\). ✓</li>
+    </ol>
+    <b>Ecuación \(T(v)=w\):</b> con \(T(x,y)=x+y\) y \(w=4\), una solución particular es \((4,0)\) y \(\mathrm{Nu}(T)=\{(t,-t)\}\). Todas las soluciones: \(v=(4,0)+t(1,-1)\). Regla: <b>todas las soluciones = una particular + un elemento del núcleo</b>. Si \(w\notin\mathrm{Im}(T)\), no hay solución.
+  </div>
+
+  <h2>Composición e inversa</h2>
+  <div class="thm"><b class="lbl">Proposición</b>\([G\circ T]_{B_1B_3}=[G]_{B_2B_3}\,[T]_{B_1B_2}\). Si \(T\) es iso, \([T^{-1}]_{B_2B_1}=[T]_{B_1B_2}^{-1}\). En particular, \(F\circ F=O\iff [F]_B^2=0\).</div>
+
+  <h2>Cambio de base</h2>
+  <div class="thm"><b class="lbl">Proposición</b>Si \(B\) y \(B'\) son bases de \(V\) y \(C(B,B')\) es la matriz de cambio de base: \([T]_{B'}=C(B,B')\,[T]_B\,C(B',B)\). Es decir, \([T]_B\) y \([T]_{B'}\) son <b>semejantes</b>, y tienen los mismos autovalores, rango, traza y determinante.</div>
+  <p class="uses">Practicar: Guía 3, ej. 18 a 29.</p>
+</section>
+
+<!-- ============================ TEORÍA 3 ============================ -->
+<section class="view" id="v-t-autoval">
+  <h1>3 · Autovalores y autovectores</h1>
+  <p class="lead">Base del modelo 3 y de la mitad del modelo 5. Fuente: Notas de autovalores y Guía 4.</p>
+
+  <div class="def"><b class="lbl">Definición</b>Sea \(A\in\mathbb K^{n\times n}\). \(\lambda\in\mathbb K\) es <b>autovalor</b> de \(A\) si existe \(v\neq0\) con \(Av=\lambda v\). Ese \(v\) es un <b>autovector</b> asociado a \(\lambda\).</div>
+  <div class="thm"><b class="lbl">Cómo se calculan</b>
+  \(Av=\lambda v\iff(A-\lambda I)v=0\). Tiene solución no nula \(\iff\det(A-\lambda I)=0\).
+  <ul>
+    <li><b>Polinomio característico</b>: \(p_A(\lambda)=\det(A-\lambda I)\). Los autovalores son sus raíces.</li>
+    <li><b>Espacio propio</b>: \(S_\lambda=\mathrm{Nu}(A-\lambda I)\).</li>
+  </ul></div>
+  <div class="why">Para calcular \(\det(A-\lambda I)\) conviene desarrollar por una fila o columna con ceros. En todos los parciales hay una fila o columna con dos ceros (por ejemplo, la columna 3 de \(\begin{pmatrix}1&2&0\\4&3&0\\2&-1&5\end{pmatrix}\)). Así el polinomio sale ya factorizado y no hay que buscar raíces de una cúbica.</div>
+
+  <h2>Multiplicidades</h2>
+  <div class="def"><b class="lbl">Definición</b>
+  <b>Multiplicidad algebraica</b> \(m.a.(\lambda)\): multiplicidad de \(\lambda\) como raíz de \(p_A\).<br>
+  <b>Multiplicidad geométrica</b> \(m.g.(\lambda)=\dim S_\lambda\).</div>
+  <div class="thm"><b class="lbl">Propiedades</b>
+  <ul>
+    <li>\(1\le m.g.(\lambda)\le m.a.(\lambda)\).</li>
+    <li>\(m.g.(\lambda)=n-\mathrm{rango}(A-\lambda I)\) (teorema de la dimensión aplicado a \(x\mapsto(A-\lambda I)x\)).</li>
+    <li>Autovectores de autovalores <b>distintos</b> son LI.</li>
+  </ul></div>
+
+  <h2>Traza, determinante y matrices especiales</h2>
+  <div class="thm"><b class="lbl">Propiedades</b>Si \(\lambda_1,\dots,\lambda_n\) son los autovalores (repetidos según \(m.a.\)):
+  \[ \mathrm{tr}(A)=\lambda_1+\dots+\lambda_n,\qquad \det(A)=\lambda_1\cdots\lambda_n. \]
+  <ul>
+    <li>\(A\) es inversible \(\iff 0\) no es autovalor.</li>
+    <li>Si \(A\) es triangular (o diagonal), sus autovalores son los elementos de la diagonal.</li>
+    <li>\(A\) y \(A^T\) tienen los mismos autovalores, pero en general <b>no</b> los mismos autovectores.</li>
+  </ul></div>
+
+  <h2>Autovalores de funciones de A</h2>
+  <div class="thm"><b class="lbl">Propiedad (Guía 4, ej. 2 y 3)</b>Si \(Av=\lambda v\) con \(v\neq0\):
+  <ul>
+    <li>\(A^kv=\lambda^kv\), \((A+\alpha I)v=(\lambda+\alpha)v\), \(\alpha Av=\alpha\lambda v\).</li>
+    <li>Para cualquier polinomio \(q\): \(q(A)v=q(\lambda)v\).</li>
+    <li>Si \(A\) es inversible: \(A^{-1}v=\tfrac1\lambda v\).</li>
+  </ul>
+  Los <b>autovectores se conservan</b>; los autovalores se transforman con la misma función.</div>
+  <div class="notes"><b class="lbl">De tus apuntes · lo que hay que recordar</b>
+    Si \(Av=\lambda v\): \(A^kv=\lambda^kv\), \((A-aI)^kv=(\lambda-a)^kv\), \(A^{-1}v=\tfrac1\lambda v\) (si \(A\) es inversible).<br>
+    \(\mathrm{tr}(A)=\lambda_1+\dots+\lambda_n\), \(\det(A)=\lambda_1\cdots\lambda_n\), \(\mathrm{tr}(A^k)=\lambda_1^k+\dots+\lambda_n^k\).<br>
+    <span class="fix">Ojo:</span> \(\mathrm{tr}(A^2)=\lambda_1^2+\dots+\lambda_n^2\neq(\mathrm{tr}A)^2\).<br>
+    \(A\) inversible \(\iff\) 0 no es autovalor. \(\dim S_\lambda=n-\mathrm{rg}(A-\lambda I)\), y \(1\le m.g.(\lambda)\le m.a.(\lambda)\).<br>
+    Orden de trabajo: (1) autovalores con \(\det(A-\lambda I)=0\); (2) para cada uno, \(S_\lambda=\mathrm{Nu}(A-\lambda I)\).
+  </div>
+  <div class="why">Demostración de la inversa, que conviene saber escribir: de \(Av=\lambda v\) aplicamos \(A^{-1}\) a ambos lados: \(v=\lambda A^{-1}v\). Como \(\lambda\neq0\) (\(A\) inversible), \(A^{-1}v=\frac1\lambda v\).</div>
+  <p class="uses">Se usa en: <a class="pill" href="#modelo-3">Modelo 3</a> parte b, <a class="pill" href="#modelo-5">Modelo 5</a> (traza de \(A^k\)). Practicar: Guía 4, ej. 1 a 7.</p>
+</section>
+
+<!-- ============================ TEORÍA 4 ============================ -->
+<section class="view" id="v-t-diag">
+  <h1>4 · Semejanza y diagonalización</h1>
+  <p class="lead">Fuente: Notas de semejanza de matrices y Guía 4.</p>
+  <div class="def"><b class="lbl">Definición</b>\(A\) y \(B\) son <b>semejantes</b> (\(A\sim B\)) si existe \(P\) inversible con \(A=PBP^{-1}\).</div>
+  <div class="thm"><b class="lbl">Invariantes por semejanza</b>Si \(A\sim B\): mismo polinomio característico, mismos autovalores con igual \(m.a.\), misma traza, mismo determinante y mismo rango. Además \(q(A)\sim q(B)\) para todo polinomio \(q\): si \(A=PBP^{-1}\), entonces \(q(A)=P\,q(B)\,P^{-1}\).</div>
+  <div class="def"><b class="lbl">Definición</b>\(A\) es <b>diagonalizable</b> si es semejante a una matriz diagonal: \(A=PDP^{-1}\).</div>
+  <div class="thm"><b class="lbl">Caracterizaciones</b>
+  <ul>
+    <li>\(A\) diagonalizable \(\iff\) existe una base de \(\mathbb K^n\) formada por autovectores de \(A\).</li>
+    <li>\(A\) diagonalizable \(\iff\) para cada autovalor, \(m.g.(\lambda)=m.a.(\lambda)\) (y \(p_A\) se factoriza completo en \(\mathbb K\)).</li>
+    <li>Si \(A\) tiene \(n\) autovalores <b>distintos</b>, es diagonalizable (condición suficiente, no necesaria).</li>
+  </ul>
+  En ese caso \(P=(v_1|\cdots|v_n)\) con autovectores en columnas y \(D=\mathrm{diag}(\lambda_1,\dots,\lambda_n)\) <b>en el mismo orden</b>.</div>
+  <div class="why">Si \(m.a.(\lambda)=1\), automáticamente \(m.g.=1\) (porque \(1\le m.g.\le m.a.\)). Solo hay que controlar los autovalores repetidos. Por eso en los parciales el autovalor doble es el que define si la matriz diagonaliza.</div>
+  <div class="notes"><b class="lbl">De tus apuntes · cómo comprobar que diagonaliza</b>
+    \(A\in\mathbb R^{n\times n}\) es diagonalizable \(\iff\) tiene \(n\) autovectores LI \(\iff\) \(\dim S_{\lambda_1}+\dots+\dim S_{\lambda_k}=n\), sumando una vez por cada autovalor <b>distinto</b>.<br>
+    Ejemplo (2024): \(\dim S_3+\dim S_4=2+1=3\), entonces \(A\) diagonaliza.<br>
+    Al armar \(P\), comprobá que es inversible (\(\det P\neq0\)) y poné los autovalores en \(D\) <b>en el mismo orden</b> que las columnas de \(P\).
+  </div>
+  <div class="thm"><b class="lbl">Potencias</b>\(A=PDP^{-1}\Rightarrow A^k=PD^kP^{-1}\), y \(D^k=\mathrm{diag}(\lambda_1^k,\dots,\lambda_n^k)\).</div>
+  <div class="thm"><b class="lbl">Transpuesta</b>Si \(A=PDP^{-1}\), entonces \(A^T=(P^{-1})^TDP^T=QDQ^{-1}\) con \(Q=(P^T)^{-1}\). \(A^T\) diagonaliza, pero con otra matriz de cambio.</div>
+  <div class="def"><b class="lbl">Autovalores de un endomorfismo</b>Si \(T:V\to V\), los autovalores de \(T\) son los de \([T]_B\) en cualquier base \(B\) (las matrices en distintas bases son semejantes). \(T(v)=\lambda v\iff[T]_B[v]_B=\lambda[v]_B\).</div>
+  <p class="uses">Se usa en: <a class="pill" href="#modelo-3">Modelo 3</a>, <a class="pill" href="#modelo-5">Modelo 5</a>. Practicar: Guía 4, ej. 8 a 24.</p>
+</section>
+
+<!-- ============================ TEORÍA 5 ============================ -->
+<section class="view" id="v-t-pi">
+  <h1>5 · Espacios con producto interno</h1>
+  <p class="lead">Fuente: Notas FIUBA de producto interno y Guía 5.</p>
+  <div class="def"><b class="lbl">Definición (espacio real)</b>Un producto interno en \(V\) es una función \(\langle\cdot,\cdot\rangle:V\times V\to\mathbb R\) tal que para todo \(u,v,w\in V\), \(\alpha\in\mathbb R\):
+  <ol>
+    <li>\(\langle u,v\rangle=\langle v,u\rangle\) (simetría)</li>
+    <li>\(\langle u+v,w\rangle=\langle u,w\rangle+\langle v,w\rangle\)</li>
+    <li>\(\langle\alpha u,v\rangle=\alpha\langle u,v\rangle\)</li>
+    <li>\(\langle v,v\rangle\ge0\) y \(\langle v,v\rangle=0\iff v=0\) (<b>axioma 4</b>, el que se toma en el parcial)</li>
+  </ol>
+  En un espacio complejo, 1 pasa a ser \(\langle u,v\rangle=\overline{\langle v,u\rangle}\).</div>
+  <div class="why">Los axiomas 1 a 3 suelen salir directo de las propiedades de la suma y el producto. El 4 es el que distingue un producto interno: hay que mostrar que \(\langle v,v\rangle\) es una suma de cuadrados y que la única forma de que dé cero es \(v=0\). Ahí se usa el espacio (por ejemplo, en \(P_1\) un polinomio con \(p(1)=p'(1)=0\) es nulo; en \(P_2\) no, porque \((x-1)^2\) cumple eso).</div>
+  <div class="thm"><b class="lbl">Producto \(X^TAY\) en \(\mathbb R^n\)</b>\(\langle X,Y\rangle=X^TAY\) es producto interno \(\iff A\) es simétrica y \(X^TAX>0\) para todo \(X\neq0\). Para \(2\times2\) se completa cuadrados.</div>
+
+  <h2>Norma, distancia, ángulo</h2>
+  <div class="def"><b class="lbl">Definiciones</b>\(\|v\|=\sqrt{\langle v,v\rangle}\) &nbsp; \(d(u,v)=\|u-v\|\) &nbsp; \(\cos\theta=\dfrac{\langle u,v\rangle}{\|u\|\,\|v\|}\) (espacio real, \(u,v\neq0\)).</div>
+  <div class="thm"><b class="lbl">Teoremas</b>
+  <ul>
+    <li>\(\|\alpha v\|=|\alpha|\,\|v\|\).</li>
+    <li>Cauchy–Schwarz: \(|\langle u,v\rangle|\le\|u\|\|v\|\). Triangular: \(\|u+v\|\le\|u\|+\|v\|\).</li>
+    <li><b>Pitágoras</b>: si \(u\perp v\), entonces \(\|u+v\|^2=\|u\|^2+\|v\|^2\). <b>Con cuadrados</b>; sin cuadrados es falso en general.</li>
+    <li>Desarrollo útil: \(\|u+v\|^2=\|u\|^2+2\langle u,v\rangle+\|v\|^2\) (real).</li>
+  </ul></div>
+
+  <h2>Ortogonalidad y complemento ortogonal</h2>
+  <div class="def"><b class="lbl">Definiciones</b>\(u\perp v\iff\langle u,v\rangle=0\). Un conjunto es <b>ortogonal</b> si sus vectores son ortogonales dos a dos; <b>ortonormal</b> si además tienen norma 1.<br>
+  \(S^\perp=\{v\in V:\langle v,s\rangle=0\ \forall s\in S\}\). Es subespacio aunque \(S\) no lo sea.</div>
+  <div class="thm"><b class="lbl">Propiedades</b>
+  <ul>
+    <li>Si \(S=\mathrm{gen}\{s_1,\dots,s_k\}\): \(v\in S^\perp\iff\langle v,s_i\rangle=0\) para cada generador. No hace falta probar con todos los vectores de \(S\).</li>
+    <li>\(\dim S+\dim S^\perp=\dim V\) y \(S\cap S^\perp=\{0\}\).</li>
+    <li>\((S^\perp)^\perp=S\) (dimensión finita).</li>
+    <li>Un conjunto ortogonal de vectores no nulos es LI.</li>
+  </ul></div>
+  <div class="why">Truco que resolvió 2024: si el subespacio está dado por una ecuación que es exactamente \(\langle p,w\rangle=0\) para un \(w\) fijo, entonces \(S=\{w\}^\perp\) y por la propiedad \((S^\perp)^\perp=S\), \(S^\perp=\mathrm{gen}\{w\}\).</div>
+
+  <div class="notes"><b class="lbl">De tus apuntes · fórmulas extra</b>
+    Desigualdad triangular: \(\|u+v\|\le\|u\|+\|v\|\). Desarrollo: \(\|u\pm v\|^2=\|u\|^2\pm2\langle u,v\rangle+\|v\|^2\).<br>
+    Identidad de polarización (real): \(\langle u,v\rangle=\dfrac{\|u+v\|^2-\|u-v\|^2}{4}\).<br>
+    En espacio real: \(u\perp v\iff\|u+v\|^2=\|u\|^2+\|v\|^2\). Ejemplo: si \(u\perp v\), \(\|u+2v\|=\sqrt{\|u\|^2+4\|v\|^2}\).<br>
+    <span class="fix">Corrección a tus apuntes:</span> en Cauchy–Schwarz, la igualdad \(|\langle u,v\rangle|=\|u\|\|v\|\) vale si y solo si \(u\) y \(v\) son <b>linealmente dependientes</b> (uno es múltiplo del otro). Tus notas dicen “LI”.
+  </div>
+
+  <h2>Proyección y Gram–Schmidt</h2>
+  <div class="thm"><b class="lbl">Proyección ortogonal</b>Si \(\{e_1,\dots,e_k\}\) es base ortogonal de \(S\): \(P_S(v)=\sum_i\frac{\langle v,e_i\rangle}{\langle e_i,e_i\rangle}e_i\). Además \(v-P_S(v)\in S^\perp\) y \(d(v,S)=\|v-P_S(v)\|\).</div>
+  <div class="thm"><b class="lbl">Gram–Schmidt</b>\(e_1=u_1\), \(e_2=u_2-\frac{\langle u_2,e_1\rangle}{\langle e_1,e_1\rangle}e_1\), \(e_3=u_3-\frac{\langle u_3,e_1\rangle}{\langle e_1,e_1\rangle}e_1-\frac{\langle u_3,e_2\rangle}{\langle e_2,e_2\rangle}e_2\), y así sucesivamente.</div>
+  <div class="thm"><b class="lbl">Teorema de descomposición ortogonal</b>Si \(S\) es subespacio de \(V\) (dimensión finita), todo \(v\in V\) se escribe de manera única como
+  \[v=\underbrace{P_S(v)}_{\in S}+\underbrace{\big(v-P_S(v)\big)}_{\in S^\perp},\qquad V=S\oplus S^\perp.\]
+  Entonces \(P_{S^\perp}(v)=v-P_S(v)\) y \(d(v,S)=\|v-P_S(v)\|=\|P_{S^\perp}(v)\|\).</div>
+  <div class="why">Para calcular \(P_S(v)\) con la fórmula hace falta una base <b>ortogonal</b> de \(S\). Si la de \(S\) no lo es pero la de \(S^\perp\) sí (o \(S^\perp\) tiene dimensión 1), conviene proyectar sobre \(S^\perp\) y usar \(P_S(v)=v-P_{S^\perp}(v)\). Con una base ortonormal la fórmula queda \(P_S(v)=\sum\langle v,u_i\rangle u_i\).</div>
+  <div class="notes"><b class="lbl">De tus apuntes · producto \(\mathrm{tr}(A^TB)\) en \(\mathbb R^{2\times2}\)</b>
+    \(\langle X,Y\rangle=\mathrm{tr}(X^TY)\) es la suma de los productos de las entradas en la misma posición: con \(X=\begin{pmatrix}a&b\\c&d\end{pmatrix}\), \(Y=\begin{pmatrix}e&f\\g&h\end{pmatrix}\), \(\langle X,Y\rangle=ae+bf+cg+dh\). La norma es \(\|X\|=\sqrt{\mathrm{tr}(X^TX)}\). Ver el ejercicio resuelto en <a href="#practica">Práctica</a>.
+  </div>
+  <p class="uses">Se usa en: <a class="pill" href="#modelo-4">Modelo 4</a>, <a class="pill" href="#modelo-5">Modelo 5</a> b. Practicar: Guía 5, ej. 1 a 7, 12 a 15.</p>
+</section>
+
+<!-- ============================ MODELO 1 ============================ -->
+<section class="view" id="v-modelo-1">
+  <h1>Modelo 1 · TL definida por una fórmula</h1>
+  <p class="lead">Se reconoce porque te dan \(T(p)\) o \(T(X)\) con una fórmula explícita (evaluaciones, derivadas, producto por una matriz). Parte a: probar que es TL. Parte b: Nu/Im, o decidir si es isomorfismo (a veces con parámetros).</p>
+
+  <h2>Receta</h2>
+  <ol class="steps">
+    <li><b>Probar linealidad con la definición.</b> Tomá \(p,q\in V\), \(\alpha\in\mathbb R\) genéricos. Calculá \(T(p+q)\) y \(T(\alpha p)\) usando que la evaluación y la derivada son lineales: \((p+q)(a)=p(a)+q(a)\), \((\alpha p)'=\alpha p'\), \((X+Y)A=XA+YA\).
+      <div class="why">Hay que probarlo para elementos <b>genéricos</b>; un ejemplo no alcanza. Usá la propiedad distributiva de la operación concreta y nombrala: “por linealidad de la derivada”, “por propiedad distributiva del producto de matrices”.</div></li>
+    <li><b>Escribí la TL en coordenadas.</b> Con \(p=a+bx+cx^2\), calculá \(T(p)\) en función de \(a,b,c\). Opcional: armá \([T]_{EE'}\) con bases canónicas.
+      <div class="why">Pasar a coordenadas convierte todo en un sistema lineal. La matriz en canónicas es útil para el isomorfismo: \(T\) iso \(\iff\det[T]\neq0\).</div></li>
+    <li><b>Núcleo.</b> Planteá \(T(p)=0\) y resolvé el sistema. Escribí la solución como \(\mathrm{gen}\{\dots\}\) y verificá que los generadores son LI.</li>
+    <li><b>Dimensión de la imagen por el teorema de la dimensión.</b> \(\dim\mathrm{Im}=\dim V-\dim\mathrm{Nu}\). Después buscá esa cantidad de vectores LI entre las imágenes de una base de \(V\).
+      <div class="why">Las imágenes de una base generan \(\mathrm{Im}(T)\). Como ya sabés cuántos vectores necesitás, te alcanza con elegir esa cantidad de imágenes LI.</div></li>
+    <li><b>Isomorfismo.</b> Si \(\dim V=\dim W\), \(T\) es iso \(\iff\mathrm{Nu}(T)=\{0\}\). Si hay parámetros, buscá para qué valores el núcleo es trivial (o \(\det\neq0\)).
+      <div class="why">Con dimensiones iguales, mono, epi e iso son equivalentes (corolario del teorema de la dimensión). Si \(\dim V\neq\dim W\), no puede ser iso y se dice directamente.</div></li>
+  </ol>
+
+  <h2>Trampas que aparecieron</h2>
+  <div class="trap">En 2024, \(G(p)\) solo depende de \(p(0)\) y \(p(1)\). Cualquier polinomio que se anule en 0 y en 1 (por ejemplo \(x-x^2\)) está en el núcleo. Mirá la fórmula antes de hacer cuentas.</div>
+  <div class="trap">En 2019, el parámetro \(\alpha\) no influye: el resultado es “iso \(\iff\beta\neq0\), para todo \(\alpha\)”. Decí explícitamente qué pasa con cada parámetro.</div>
+  <div class="trap">\(p''(0)=2c\), no \(c\). Cuidado con los factores al derivar.</div>
+
+  <h2>Plantilla de redacción</h2>
+  <div class="card mono" style="font-size:.88rem;white-space:pre-line">Sean p, q ∈ P₂ y α ∈ ℝ.
+T(p+q) = ( (p+q)(0), … ) = ( p(0)+q(0), … ) = T(p) + T(q)   [por def. de suma de polinomios y linealidad de la derivada]
+T(αp) = … = α T(p)
+Luego T es TL.
+b) dim P₂ = dim ℝ³ = 3 ⇒ T iso ⟺ Nu(T) = {0}.
+Sea p = a + bx + cx² ∈ Nu(T) ⇔ T(p) = 0 ⇔ { … } ⇔ a = b = c = 0.
+Nu(T) = {0} ⇒ T monomorfismo, y como las dimensiones coinciden, T es isomorfismo.</div>
+
+  <h2>Dónde aparece</h2>
+  <p><a class="pill" href="#p-2018">2018 · Ej 1</a> <a class="pill" href="#p-2019">2019 · Ej 1</a> <a class="pill" href="#p-2024">2024 · Ej 1</a> <a class="pill" href="#p-viejo">Viejo · Ej 1</a> <a class="pill" href="#practica">Clase 19/11 · Ej 1</a></p>
+  <p class="uses">Más práctica: Guía 3, ej. 1, 2, 16, 25 a y c.</p>
+</section>
+
+<!-- ============================ MODELO 2 ============================ -->
+<section class="view" id="v-modelo-2">
+  <h1>Modelo 2 · TL dada por su matriz en una base (o por condiciones)</h1>
+  <p class="lead">Te dan \([T]_B\) con \(B\) una base no canónica de \(P_2\), o te dan condiciones sobre una base abstracta (\(F\circ F=O\), \(F(v_2)=\dots\)). Se pide: matriz, Nu, Im, imagen o preimagen de un subespacio, o resolver \(T(p)=q\).</p>
+
+  <h2>Receta</h2>
+  <ol class="steps">
+    <li><b>Si la TL viene dada por condiciones: armá la matriz.</b> Usá linealidad para despejar \(F(v_1),F(v_2),F(v_3)\). Las columnas de \([F]_B\) son sus coordenadas.
+      <div class="why">Por el teorema de existencia y unicidad, conocer \(F\) en una base la determina. Una condición como \(F\circ F=O\) aporta ecuaciones extra: aplicá \(F\) a algo que ya conocés, por ejemplo \(F(F(v_1))=0\).</div></li>
+    <li><b>Rango de la matriz ⇒ dimensiones.</b> Escalonar o ver combinaciones entre filas (\(\det=0\) indica rango menor a 3). Entonces \(\dim\mathrm{Im}=\mathrm{rango}\) y \(\dim\mathrm{Nu}=n-\mathrm{rango}\).
+      <div class="why">Empezar por las dimensiones dice cuántos vectores buscar y sirve de control al final.</div></li>
+    <li><b>Núcleo: resolvé \([T]_B\,c=0\)</b> y traducí: si \(c=(c_1,c_2,c_3)\), el polinomio es \(p=c_1b_1+c_2b_2+c_3b_3\).
+      <div class="why">\([T]_B[p]_B=[T(p)]_B\), y \([T(p)]_B=0\iff T(p)=0\). Pero la solución del sistema son <b>coordenadas</b>: la base de Nu tiene que ser de polinomios.</div></li>
+    <li><b>Imagen: columnas LI, traducidas.</b> Elegí tantas columnas LI como el rango. Cada columna son las coordenadas de \(T(b_j)\) en \(B\): armá el polinomio. Simplificá la base si querés (combinaciones lineales de la base siguen generando).</li>
+    <li><b>Resolver \(T(p)=q\).</b> Primero calculá \([q]_B\). Después resolvé \([T]_B\,c=[q]_B\). La solución general es \(p=p_0+\mathrm{Nu}(T)\).
+      <div class="why">Si \(T(p_0)=q\), todas las soluciones son \(p_0+n\) con \(n\in\mathrm{Nu}(T)\), porque \(T(p)=T(p_0)\iff p-p_0\in\mathrm{Nu}(T)\). Si \(q\notin\mathrm{Im}(T)\), el sistema es incompatible y no hay solución.</div></li>
+    <li><b>Imagen de un subespacio \(F(S)\):</b> aplicá \(F\) a los generadores de \(S\) y quedate con los LI. <b>Preimagen \(F^{-1}(S)\):</b> planteá \([F]_B c\in[S]_B\) como sistema.
+      <div class="why">\(F^{-1}(S)\) siempre contiene a \(\mathrm{Nu}(F)\). Control de dimensión: \(\dim F^{-1}(S)=\dim\mathrm{Nu}(F)+\dim(S\cap\mathrm{Im}F)\).</div></li>
+  </ol>
+
+  <h2>Trampas que aparecieron</h2>
+  <div class="trap">Dar la base del núcleo como vectores de \(\mathbb R^3\) en lugar de polinomios. El enunciado de 2024 lo advierte en negrita.</div>
+  <div class="trap">Usar \((4,0,0)\) como coordenadas de \(q=4\). En la base \(\{2-x,2+x,4+x^2\}\) son \((1,1,0)\).</div>
+  <div class="trap">En 2018, \(F(v_1+2v_2)\) no es \(F(v_1)\). Hay que despejar: \(F(v_1)=F(v_1+2v_2)-2F(v_2)\).</div>
+
+  <h2>Dónde aparece</h2>
+  <p><a class="pill" href="#p-2018">2018 · Ej 2</a> <a class="pill" href="#p-2019">2019 · Ej 2</a> <a class="pill" href="#p-2024">2024 · Ej 2</a> <a class="pill" href="#p-viejo">Viejo · Ej 2</a> <a class="pill" href="#practica">Práctica · \(B=\{1,1+x,(1+x)^2\}\)</a> <a class="pill" href="#practica">Clase 19/11 · Ej 2</a></p>
+  <p class="uses">Más práctica: Guía 3, ej. 19, 20, 24, 26 a 29.</p>
+</section>
+
+<!-- ============================ MODELO 3 ============================ -->
+<section class="view" id="v-modelo-3">
+  <h1>Modelo 3 · Autovalores, espacios propios y diagonalizar \(B=f(A)\)</h1>
+  <p class="lead">Parte a: autovalores y espacios propios de una \(A\) de \(3\times3\). Parte b: una \(B\) construida a partir de \(A\) (\(A^{-1}\), \(A^T\), potencias, polinomios) que hay que diagonalizar <b>sin calcularla</b>.</p>
+
+  <h2>Receta</h2>
+  <ol class="steps">
+    <li><b>Polinomio característico desarrollando por la fila o columna con ceros.</b> \(p_A(\lambda)=\det(A-\lambda I)\). Factorizá el cuadrático que queda.
+      <div class="why">Así el polinomio sale factorizado sin buscar raíces de una cúbica. Verificación rápida: la suma de los autovalores tiene que dar \(\mathrm{tr}(A)\).</div></li>
+    <li><b>Espacio propio de cada autovalor: \(S_\lambda=\mathrm{Nu}(A-\lambda I)\).</b> Antes de resolver, mirá el rango de \(A-\lambda I\): \(\dim S_\lambda=3-\mathrm{rango}\).
+      <div class="why">Teorema de la dimensión. Si \(A-\lambda I\) tiene todas las filas proporcionales, el rango es 1 y \(\dim S_\lambda=2\): ya sabés que \(m.g.=m.a.\) para el autovalor doble.</div></li>
+    <li><b>Decidí si diagonaliza.</b> Compará \(m.g.\) con \(m.a.\) solo para los autovalores repetidos.
+      <div class="why">Para los simples, \(1\le m.g.\le m.a.=1\) obliga \(m.g.=1\).</div></li>
+    <li><b>Autovalores de \(B\) sin calcular \(B\).</b> Si \(B=q(A)\) o \(B=\alpha A^{-1}+\beta I\), cada autovector \(v\) de \(A\) con autovalor \(\lambda\) cumple \(Bv=f(\lambda)v\).
+      <div class="why">Probalo en una línea: \(Bv=(\alpha A^{-1}+\beta I)v=\alpha\frac1\lambda v+\beta v=\big(\frac\alpha\lambda+\beta\big)v\). Para \(A^{-1}\) primero justificá que \(A\) es inversible: 0 no es autovalor.</div></li>
+    <li><b>Armá \(P\) y \(D\).</b> \(P\) con los autovectores de \(A\) en columnas; \(D\) con \(f(\lambda_i)\) en el mismo orden. Como los autovectores de \(A\) forman base de \(\mathbb R^3\), \(P\) es inversible.
+      <div class="why">\(B\) tiene una base de autovectores (la misma que \(A\)), entonces \(B\) es diagonalizable con esa \(P\).</div></li>
+  </ol>
+
+  <h2>Caso especial: aparece \(A^T\)</h2>
+  <div class="trap">En 2018, \(B=(A^T+4I)^{100}\). Los autovalores de \(A^T\) son los de \(A\), pero los <b>autovectores no</b>. Hay que calcular los espacios propios de \(A^T\) (o usar \(Q=(P^{-1})^T\) y dejarla expresada).</div>
+
+  <h2>Plantilla de redacción para la parte b</h2>
+  <div class="card mono" style="font-size:.88rem;white-space:pre-line">0 no es autovalor de A ⇒ det(A) ≠ 0 ⇒ A inversible.
+Si Av = λv, v ≠ 0 ⇒ A⁻¹v = (1/λ)v ⇒ Bv = (5/λ + 2)v.
+Entonces los autovectores de A son autovectores de B, con autovalor 5/λ + 2.
+λ = 5 → 3 (doble), λ = 1 → 7.
+Como {v₁, v₂, v₃} es base de ℝ³ formada por autovectores de B, B es diagonalizable:
+P = (v₁ v₂ v₃), D = diag(3, 3, 7), B = P D P⁻¹.</div>
+
+  <h2>Dónde aparece</h2>
+  <p><a class="pill" href="#p-2018">2018 · Ej 3</a> <a class="pill" href="#p-2019">2019 · Ej 3</a> <a class="pill" href="#p-2024">2024 · Ej 3</a> <a class="pill" href="#p-viejo">Viejo · Ej 4</a> <a class="pill" href="#practica">Práctica · \(A^6-5A^2\)</a></p>
+  <p class="uses">Más práctica: Guía 4, ej. 1, 2, 3, 8, 14 c, 15, 24.</p>
+</section>
+
+<!-- ============================ MODELO 4 ============================ -->
+<section class="view" id="v-modelo-4">
+  <h1>Modelo 4 · Producto interno</h1>
+  <p class="lead">Te definen un producto interno en \(P_1\), \(P_2\) o \(\mathbb R^2\). Parte a: probar el axioma 4 (o que \(X^TAX>0\)). Parte b: complemento ortogonal, y a veces todos los vectores con una norma o distancia dada.</p>
+
+  <h2>Receta</h2>
+  <ol class="steps">
+    <li><b>Axioma 4: escribí \(\langle p,p\rangle\) como suma de cuadrados.</b> Con \(p=a_0+a_1x\), reemplazá y ordená. Una suma de cuadrados es \(\ge0\).
+      <div class="why">Para \(X^TAX\) hay que completar cuadrados: \(x^2+2xy+2y^2=(x+y)^2+y^2\).</div></li>
+    <li><b>“= 0 ⟺ p = 0”.</b> Una suma de cuadrados es 0 \(\iff\) cada término es 0. Eso da un sistema homogéneo; mostrá que su única solución es la nula. La vuelta (\(p=0\Rightarrow\langle p,p\rangle=0\)) es inmediata, pero escribila.
+      <div class="why">Acá se usa el espacio. En \(P_1\), “\(p(1)=0\) y \(p'(1)=0\)” obliga \(p=0\); en \(P_2\) no (contraejemplo \((x-1)^2\)). Mencionalo: muestra que entendiste por qué funciona.</div></li>
+    <li><b>Complemento ortogonal: ortogonal a los generadores.</b> Si \(S=\mathrm{gen}\{s_1,\dots,s_k\}\), \(p\in S^\perp\iff\langle p,s_i\rangle=0\ \forall i\). Si \(S\) viene con ecuaciones, primero buscá una base de \(S\).
+      <div class="why">Por linealidad del producto interno, ser ortogonal a los generadores implica ser ortogonal a cualquier combinación lineal de ellos.</div></li>
+    <li><b>Controlá con dimensiones.</b> \(\dim S^\perp=\dim V-\dim S\).
+      <div class="why">En \(P_1\) con \(\dim S=1\), \(S^\perp\) tiene dimensión 1: alcanza con un solo vector no nulo ortogonal.</div></li>
+    <li><b>Norma o distancia dada.</b> Parametrizá \(p=k\,w\) (si \(S^\perp=\mathrm{gen}\{w\}\)) y planteá \(\|p\|^2\) o \(\|p-q\|^2\) igual al cuadrado del dato. Queda una ecuación en \(k\): suele tener dos soluciones.
+      <div class="why">Trabajar con cuadrados evita raíces. Para la norma: \(\|kw\|=|k|\,\|w\|\), así que \(|k|=\frac{\text{dato}}{\|w\|}\) y hay dos signos.</div></li>
+  </ol>
+
+  <h2>Atajo que conviene reconocer</h2>
+  <div class="why">Si la ecuación de \(S\) es exactamente \(\langle p,w\rangle=0\) para algún \(w\) (en 2024, \(p(0)+p(1)=2a_0+a_1+a_2=\langle p,\,2+x+x^2\rangle\)), entonces \(S=\{w\}^\perp\) y \(S^\perp=\mathrm{gen}\{w\}\).</div>
+  <div class="trap">Usar el producto escalar usual cuando el enunciado define otro. Todo (ortogonalidad, norma, distancia) se calcula con el producto que te dan.</div>
+
+  <h2>Dónde aparece</h2>
+  <p><a class="pill" href="#p-2018">2018 · Ej 4</a> <a class="pill" href="#p-2019">2019 · Ej 4</a> <a class="pill" href="#p-2024">2024 · Ej 4</a> <a class="pill" href="#p-viejo">Viejo · Ej 3</a> <a class="pill" href="#practica">Práctica · \(\mathbb R^4\)</a> <a class="pill" href="#practica">Clase 19/11 · Ej 3</a> <a class="pill" href="#practica">2024 2C · Ej 4</a></p>
+  <p class="uses">Más práctica: Guía 5, ej. 1, 2, 3, 5, 14, 15.</p>
+</section>
+
+<!-- ============================ MODELO 5 ============================ -->
+<section class="view" id="v-modelo-5">
+  <h1>Modelo 5 · Teórico: V o F y deducciones</h1>
+  <p class="lead">Dos ítems cortos. Uno sobre autovalores y diagonalización, otro sobre ortogonalidad y normas. Si es verdadero, se demuestra en general; si es falso, se da un contraejemplo concreto.</p>
+
+  <h2>Receta para V o F</h2>
+  <ol class="steps">
+    <li><b>Probá con el caso más simple.</b> Matrices \(2\times2\) diagonales, \(u=(1,0)\), \(v=(0,1)\) en \(\mathbb R^2\) con el producto usual.
+      <div class="why">Si la afirmación falla, el contraejemplo suele estar en el caso más chico. Si no falla en varios casos, probablemente sea verdadera y hay que demostrarla.</div></li>
+    <li><b>Si es falsa: contraejemplo completo.</b> Escribí el objeto concreto, verificá que cumple la hipótesis y mostrá que no cumple la tesis, con números.</li>
+    <li><b>Si es verdadera: demostración general.</b> Partí de las hipótesis y usá teoremas con nombre (autovalores de triangular, \(n\) autovalores distintos, linealidad del producto interno, Pitágoras).</li>
+  </ol>
+
+  <h2>Receta para “halle la traza de \(A^k\)”</h2>
+  <ol class="steps">
+    <li><b>Sacá autovalores de cada dato.</b> \(Av=\mu v\) con \(v\neq0\) ⇒ \(\mu\) es autovalor. \(\mathrm{rango}(A-\lambda I)=r&lt;n\) ⇒ \(\lambda\) es autovalor con \(m.g.=n-r\).
+      <div class="why">\(\mathrm{rango}(A-\lambda I)&lt;n\) ⇒ \(\det(A-\lambda I)=0\). Y por el teorema de la dimensión, \(\dim\mathrm{Nu}(A-\lambda I)=n-r\).</div></li>
+    <li><b>Completá los autovalores que faltan</b> con \(\mathrm{tr}(A)=\sum\lambda_i\), \(\det(A)=\prod\lambda_i\), o con \(m.a.\ge m.g.\) y que las \(m.a.\) suman \(n\).</li>
+    <li><b>Autovalores de \(A^k\)</b> son \(\lambda_i^k\), así que \(\mathrm{tr}(A^k)=\sum\lambda_i^k\).
+      <div class="why">Si \(A=PDP^{-1}\), \(A^k=PD^kP^{-1}\) y la traza es invariante por semejanza: \(\mathrm{tr}(A^k)=\mathrm{tr}(D^k)\).</div></li>
+  </ol>
+
+  <h2>Receta para “\(A\) dada sobre una base abstracta”</h2>
+  <ol class="steps">
+    <li><b>Despejá \(Av_i\) para cada vector de la base</b> sumando, restando o combinando los datos (por linealidad).</li>
+    <li><b>Si \(Av_i=\lambda v_i\)</b>, \(v_i\) es autovector (es no nulo por ser de una base) y \(\lambda\) autovalor.
+      <div class="why">Si aparecen \(n\) autovalores distintos, no puede haber otros y cada \(S_\lambda\) tiene dimensión 1. Si no da un múltiplo, armá \([A]_B\) con las coordenadas y trabajá con esa matriz: tiene los mismos autovalores que \(A\).</div></li>
+  </ol>
+
+  <h2>Banco de afirmaciones frecuentes</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Afirmación</th><th>Valor</th><th>Argumento</th></tr></thead>
+    <tbody>
+      <tr><td>Triangular con diagonal de elementos distintos ⇒ diagonalizable</td><td>V</td><td>Autovalores = diagonal; \(n\) distintos ⇒ diagonaliza.</td></tr>
+      <tr><td>No inversible ⇒ no diagonalizable</td><td>F</td><td>\(\begin{pmatrix}1&0\\0&0\end{pmatrix}\) es diagonal y singular.</td></tr>
+      <tr><td>Diagonalizable ⇒ inversible</td><td>F</td><td>El mismo contraejemplo.</td></tr>
+      <tr><td>\(u\perp v\Rightarrow\|u+v\|=\|u\|+\|v\|\)</td><td>F</td><td>\(u=(1,0),v=(0,1)\): \(\sqrt2\neq2\). Vale Pitágoras con cuadrados.</td></tr>
+      <tr><td>\(u\perp v\Rightarrow\|u+v\|^2=\|u\|^2+\|v\|^2\)</td><td>V</td><td>Desarrollar y usar \(\langle u,v\rangle=0\).</td></tr>
+      <tr><td>\(\|u\|=\|v\|\Rightarrow(u+v)\perp(u-v)\) (real)</td><td>V</td><td>\(\langle u+v,u-v\rangle=\|u\|^2-\|v\|^2=0\).</td></tr>
+      <tr><td>Combinaciones de un conjunto ortonormal son ortogonales</td><td>Depende</td><td>Calcular cada producto con bilinealidad.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Dónde aparece</h2>
+  <p><a class="pill" href="#p-2018">2018 · Ej 5</a> <a class="pill" href="#p-2019">2019 · Ej 5</a> <a class="pill" href="#p-2024">2024 · Ej 5</a> <a class="pill" href="#p-viejo">Viejo · Ej 5</a> <a class="pill" href="#practica">Práctica · Ej 5 (base abstracta)</a></p>
+  <p class="uses">Más práctica: Guía 4, ej. 4, 5, 16, 17, 18, 21; Guía 5, ej. 6, 7, 12.</p>
+</section>
+
+<!-- ============================ PARCIAL 2018 ============================ -->
+<section class="view" id="v-p-2018">
+  <h1>Segundo parcial · 1er cuatrimestre 2018</h1>
+  <p class="lead">Intentá cada ítem antes de abrir la resolución.</p>
+
+  <div class="ex" data-ex="2018-1"><div class="ex-h"><h3>Ejercicio 1 <a class="pill" href="#modelo-1">Modelo 1</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">Sea \(T:\mathbb R^{2\times2}\to\mathbb R^{2\times2}\), \(T(X)=XA\) siendo \(A=\begin{pmatrix}2&-6\\-1&3\end{pmatrix}\).<br>a) Pruebe que \(T\) es una transformación lineal. b) Halle una base de \(\mathrm{Nu}(T)\) y una base de \(\mathrm{Im}(T)\).</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>Sean \(X,Y\in\mathbb R^{2\times2}\), \(\alpha\in\mathbb R\):</p>
+      \[T(X+Y)=(X+Y)A=XA+YA=T(X)+T(Y),\qquad T(\alpha X)=(\alpha X)A=\alpha(XA)=\alpha T(X).\]
+      <div class="why">Se usa la propiedad distributiva del producto de matrices respecto de la suma y la compatibilidad con el producto por escalar. Son propiedades de las matrices, y las probamos para \(X,Y\) genéricas.</div>
+      <div class="ans">\(T\) es transformación lineal.</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p><b>Observación clave.</b> Si \(X=\begin{pmatrix}a&b\\c&d\end{pmatrix}\), cada fila de \(XA\) es la fila correspondiente de \(X\) multiplicada por \(A\): \((a\ b)A=(2a-b)\,(1\ \ {-3})\).</p>
+      <div class="why">\((a\ b)\begin{pmatrix}2&-6\\-1&3\end{pmatrix}=(2a-b,\ -6a+3b)=(2a-b)(1,-3)\). Además, las filas de \(A\) son proporcionales (\(\det A=0\), rango 1), por eso todo sale múltiplo de \((1,-3)\).</div>
+      <p><b>Núcleo.</b> \(XA=0\iff 2a-b=0\) y \(2c-d=0\iff b=2a,\ d=2c\):</p>
+      \[X=a\begin{pmatrix}1&2\\0&0\end{pmatrix}+c\begin{pmatrix}0&0\\1&2\end{pmatrix}.\]
+      <p>Las dos matrices son LI (tienen ceros en filas distintas), así que \(\dim\mathrm{Nu}(T)=2\).</p>
+      <p><b>Imagen.</b> Por el teorema de la dimensión, \(\dim\mathrm{Im}(T)=4-2=2\). Como \(XA=\begin{pmatrix}(2a-b)(1\ {-3})\\(2c-d)(1\ {-3})\end{pmatrix}\), toda imagen es combinación de \(\begin{pmatrix}1&-3\\0&0\end{pmatrix}\) y \(\begin{pmatrix}0&0\\1&-3\end{pmatrix}\), que son LI y pertenecen a la imagen (por ejemplo, son \(T\) de \(\begin{pmatrix}1&0\\0&0\end{pmatrix}\) y \(\begin{pmatrix}0&0\\1&0\end{pmatrix}\) divididas por 2).</p>
+      <div class="ans">\(B_{\mathrm{Nu}}=\left\{\begin{pmatrix}1&2\\0&0\end{pmatrix},\begin{pmatrix}0&0\\1&2\end{pmatrix}\right\}\), \(B_{\mathrm{Im}}=\left\{\begin{pmatrix}1&-3\\0&0\end{pmatrix},\begin{pmatrix}0&0\\1&-3\end{pmatrix}\right\}\).</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="2018-2"><div class="ex-h"><h3>Ejercicio 2 <a class="pill" href="#modelo-2">Modelo 2</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">Sean \(V\) un e.v., \(B=\{v_1,v_2,v_3\}\) base de \(V\) y \(F:V\to V\) TL con \(F\circ F=O\), \(F(v_1+2v_2)=v_1-2v_3\), \(F(v_2)=4v_3-2v_1\).<br>a) Halle \([F]_B\). b) Sea \(S=\mathrm{gen}\{v_1+v_2-v_3,\ v_2+v_3\}\); halle una base de \(F(S)\).</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <ol class="steps">
+        <li><b>\(F(v_1)\) por linealidad.</b> \(F(v_1)=F(v_1+2v_2)-2F(v_2)=(v_1-2v_3)-2(4v_3-2v_1)=5v_1-10v_3\).
+          <div class="why">Las condiciones dan \(F\) en \(v_1+2v_2\) y en \(v_2\); como \(F\) es lineal, \(F(v_1)=F((v_1+2v_2)-2v_2)\).</div></li>
+        <li><b>\(F(v_3)\) usando \(F\circ F=O\).</b> \(0=F(F(v_1))=F(5v_1-10v_3)=5F(v_1)-10F(v_3)\Rightarrow F(v_3)=\tfrac12F(v_1)=\tfrac52v_1-5v_3\).
+          <div class="why">Falta un dato para \(v_3\); la única información extra es \(F\circ F=O\). Aplicamos \(F\) a un vector cuya imagen conocemos y que involucra a \(v_3\).</div></li>
+        <li><b>Control:</b> \(F(F(v_2))=F(4v_3-2v_1)=4F(v_3)-2F(v_1)=2F(v_1)-2F(v_1)=0\). ✓</li>
+      </ol>
+      <div class="ans">\([F]_B=\begin{pmatrix}5&-2&\tfrac52\\0&0&0\\-10&4&-5\end{pmatrix}\) (columnas: coordenadas de \(F(v_1),F(v_2),F(v_3)\)). Se verifica \([F]_B^2=0\).</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p>\(F(S)\) está generado por las imágenes de los generadores de \(S\):</p>
+      \[F(v_1+v_2-v_3)=(5v_1-10v_3)+(4v_3-2v_1)-(\tfrac52v_1-5v_3)=\tfrac12v_1-v_3\]
+      \[F(v_2+v_3)=(4v_3-2v_1)+(\tfrac52v_1-5v_3)=\tfrac12v_1-v_3\]
+      <div class="why">Las dos imágenes coinciden, así que \(\dim F(S)=1\). Era esperable: \(\mathrm{rango}[F]_B=1\), entonces \(\dim\mathrm{Im}F=1\) y \(F(S)\subseteq\mathrm{Im}F\).</div>
+      <div class="ans">\(B_{F(S)}=\{v_1-2v_3\}\).</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="2018-3"><div class="ex-h"><h3>Ejercicio 3 <a class="pill" href="#modelo-3">Modelo 3</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">\(A=\begin{pmatrix}1&2&0\\4&3&0\\2&-1&5\end{pmatrix}\), \(B=(A^T+4I)^{100}\).<br>a) Halle autovalores y espacios propios de \(A\). b) Halle los autovalores de \(B\) y, si es posible, \(P\) inversible y \(D\) diagonal con \(B=PDP^{-1}\).</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>Desarrollando por la columna 3:</p>
+      \[p_A(\lambda)=(5-\lambda)\big[(1-\lambda)(3-\lambda)-8\big]=(5-\lambda)(\lambda^2-4\lambda-5)=-(\lambda-5)^2(\lambda+1).\]
+      <div class="why">La columna 3 tiene dos ceros, así que el determinante se reduce a un \(2\times2\). Control: \(5+5-1=9=\mathrm{tr}(A)\). ✓</div>
+      <p><b>\(\lambda=5\)</b> (\(m.a.=2\)): \(A-5I=\begin{pmatrix}-4&2&0\\4&-2&0\\2&-1&0\end{pmatrix}\), rango 1, entonces \(\dim S_5=3-1=2\). Ecuación \(y=2x\), \(z\) libre.</p>
+      <p><b>\(\lambda=-1\)</b>: \(A+I=\begin{pmatrix}2&2&0\\4&4&0\\2&-1&6\end{pmatrix}\): \(x=-y\), \(-3y+6z=0\Rightarrow y=2z\).</p>
+      <div class="ans">\(\lambda=5\): \(S_5=\mathrm{gen}\{(1,2,0),(0,0,1)\}\). \(\lambda=-1\): \(S_{-1}=\mathrm{gen}\{(-2,2,1)\}\). \(A\) diagonaliza (\(m.g.(5)=m.a.(5)=2\)).</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p><b>Autovalores.</b> \(A^T\) tiene los mismos autovalores que \(A\) (\(\det(A^T-\lambda I)=\det((A-\lambda I)^T)\)). Si \(A^Tw=\lambda w\), entonces \((A^T+4I)w=(\lambda+4)w\) y \(Bw=(\lambda+4)^{100}w\). Autovalores de \(B\): \(9^{100}\) (doble) y \(3^{100}\).</p>
+      <div class="trap">Los autovectores de \(A^T\) <b>no</b> son los de \(A\). Hay que calcularlos.</div>
+      <p><b>Espacios propios de \(A^T=\begin{pmatrix}1&4&2\\2&3&-1\\0&0&5\end{pmatrix}\).</b></p>
+      <p>\(\lambda=5\): \(A^T-5I\) tiene filas \((-4,4,2),(2,-2,-1),(0,0,0)\), rango 1: \(2x-2y-z=0\). Base \(\{(1,0,2),(0,1,-2)\}\).</p>
+      <p>\(\lambda=-1\): \(A^T+I\) tiene filas \((2,4,2),(2,4,-1),(0,0,6)\): \(z=0\), \(x=-2y\). Base \(\{(-2,1,0)\}\).</p>
+      <div class="why">Los tres vectores son autovectores de \(B\) (por el razonamiento anterior) y son LI (los dos primeros generan \(S_5\) y el tercero corresponde a otro autovalor). Forman una base de \(\mathbb R^3\) de autovectores de \(B\), entonces \(B\) es diagonalizable.</div>
+      <div class="ans">\(P=\begin{pmatrix}1&0&-2\\0&1&1\\2&-2&0\end{pmatrix}\), \(D=\mathrm{diag}(9^{100},9^{100},3^{100})\), \(B=PDP^{-1}\).</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="2018-4"><div class="ex-h"><h3>Ejercicio 4 <a class="pill" href="#modelo-4">Modelo 4</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">En \(P_1\): \(\langle a_0+a_1x,\ b_0+b_1x\rangle=a_0b_0+(a_0+a_1)(b_0+b_1)\).<br>a) Pruebe \(\langle p,p\rangle\ge0\) y \(\langle p,p\rangle=0\iff p=0\). b) Dado \(H=\mathrm{gen}\{2-x\}\), halle todos los \(p\in H^\perp\) con \(\|p\|=5\).</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>\(\langle p,p\rangle=a_0^2+(a_0+a_1)^2\ge0\) por ser suma de cuadrados.</p>
+      <p>\(\langle p,p\rangle=0\iff a_0=0\) y \(a_0+a_1=0\iff a_0=a_1=0\iff p=0\).</p>
+      <div class="why">Una suma de cuadrados reales es cero solo si cada término es cero. Notar que \(a_0=p(0)\) y \(a_0+a_1=p(1)\): el producto es \(p(0)q(0)+p(1)q(1)\).</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p>\(\dim H=1\Rightarrow\dim H^\perp=2-1=1\). Con \(p=a_0+a_1x\) y \(2-x\) (\(b_0=2,\ b_0+b_1=1\)):</p>
+      \[\langle p,2-x\rangle=2a_0+(a_0+a_1)\cdot1=3a_0+a_1=0\Rightarrow a_1=-3a_0.\]
+      <p>\(H^\perp=\mathrm{gen}\{1-3x\}\). Norma: \(\|1-3x\|^2=1^2+(1-3)^2=5\), así que \(\|1-3x\|=\sqrt5\).</p>
+      <p>\(p=k(1-3x)\Rightarrow\|p\|=|k|\sqrt5=5\Rightarrow|k|=\sqrt5\).</p>
+      <div class="why">\(\|kw\|=|k|\,\|w\|\). El valor absoluto da dos soluciones.</div>
+      <div class="ans">\(p=\sqrt5(1-3x)\) o \(p=-\sqrt5(1-3x)\).</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="2018-5"><div class="ex-h"><h3>Ejercicio 5 <a class="pill" href="#modelo-5">Modelo 5</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">V o F. a) Si \(A\in\mathbb R^{n\times n}\) es triangular inferior con \([A]_{ii}=i^3\), entonces \(A\) es diagonalizable. b) Si \(u\perp v\), entonces \(\|u+v\|=\|u\|+\|v\|\).</div>
+    <details class="sol"><summary>Resolución</summary><div>
+      <p><b>a) Verdadero.</b> \(A-\lambda I\) también es triangular, y el determinante de una triangular es el producto de su diagonal: \(p_A(\lambda)=\prod_{i=1}^n(i^3-\lambda)\). Los autovalores son \(1,8,27,\dots,n^3\), todos distintos. Una matriz \(n\times n\) con \(n\) autovalores distintos tiene \(n\) autovectores LI, entonces es diagonalizable.</p>
+      <p><b>b) Falso.</b> En \(\mathbb R^2\) con el producto usual, \(u=(1,0)\), \(v=(0,1)\): \(u\perp v\), pero \(\|u+v\|=\sqrt2\neq2=\|u\|+\|v\|\).</p>
+      <div class="why">Por Pitágoras, lo que vale es \(\|u+v\|^2=\|u\|^2+\|v\|^2\). La igualdad sin cuadrados solo se da si \(u=0\) o \(v=0\).</div>
+    </div></details>
+  </div></div>
+</section>
+
+<!-- ============================ PARCIAL 2019 ============================ -->
+<section class="view" id="v-p-2019">
+  <h1>Segundo parcial · 1er cuatrimestre 2019</h1>
+
+  <div class="ex" data-ex="2019-1"><div class="ex-h"><h3>Ejercicio 1 <a class="pill" href="#modelo-1">Modelo 1</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">\(T:P_2\to\mathbb R^3\), \(T(p)=\big(p(0),\ p'(0),\ \alpha p(0)+\beta p''(0)\big)\), \(\alpha,\beta\in\mathbb R\).<br>a) Pruebe que \(T\) es TL. b) ¿Para qué valores de \(\alpha\) y \(\beta\) resulta \(T\) un isomorfismo?</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>Sean \(p,q\in P_2\), \(\lambda\in\mathbb R\). Como \((p+q)(0)=p(0)+q(0)\), \((p+q)'=p'+q'\) y \((p+q)''=p''+q''\):</p>
+      \[T(p+q)=\big(p(0)+q(0),\ p'(0)+q'(0),\ \alpha(p(0)+q(0))+\beta(p''(0)+q''(0))\big)=T(p)+T(q).\]
+      <p>Análogamente \(T(\lambda p)=\lambda T(p)\), porque \((\lambda p)^{(k)}=\lambda p^{(k)}\).</p>
+      <div class="ans">\(T\) es TL para todo \(\alpha,\beta\).</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p>\(\dim P_2=\dim\mathbb R^3=3\), entonces \(T\) iso \(\iff\mathrm{Nu}(T)=\{0\}\).</p>
+      <div class="why">Con dimensiones iguales, por el teorema de la dimensión, inyectiva equivale a biyectiva.</div>
+      <p>Con \(p=a+bx+cx^2\): \(p(0)=a\), \(p'(0)=b\), \(p''(0)=2c\). Entonces \(T(p)=(a,\ b,\ \alpha a+2\beta c)\) y \([T]_{EE}=\begin{pmatrix}1&0&0\\0&1&0\\\alpha&0&2\beta\end{pmatrix}\), con \(\det=2\beta\).</p>
+      <p>Si \(\beta\neq0\): \(\det\neq0\), \(T\) es iso. Si \(\beta=0\): \(T(x^2)=(0,0,0)\) con \(x^2\neq0\), no es iso.</p>
+      <div class="ans">\(T\) es isomorfismo \(\iff\beta\neq0\), para cualquier \(\alpha\in\mathbb R\).</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="2019-2"><div class="ex-h"><h3>Ejercicio 2 <a class="pill" href="#modelo-2">Modelo 2</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">\(F:P_2\to P_2\), \(B=\{1,\ 1+x,\ 1-x^2\}\), \([F]_B=\begin{pmatrix}1&-1&0\\1&-1&0\\1&0&2\end{pmatrix}\).<br>a) Halle las dimensiones de \(\mathrm{Nu}(F)\) e \(\mathrm{Im}(F)\) y una base de cada uno. b) Sea \(S=\mathrm{gen}\{1-x^2\}\). Halle una base de \(F^{-1}(S)\).</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p><b>Dimensiones.</b> Las filas 1 y 2 son iguales y la 3 no es múltiplo de ellas: \(\mathrm{rango}=2\). Entonces \(\dim\mathrm{Im}(F)=2\) y, por el teorema de la dimensión, \(\dim\mathrm{Nu}(F)=3-2=1\).</p>
+      <p><b>Núcleo.</b> \([F]_Bc=0\): \(c_1-c_2=0\), \(c_1+2c_3=0\Rightarrow c=t(2,2,-1)\). Traduciendo:</p>
+      \[p=2\cdot1+2(1+x)-(1-x^2)=3+2x+x^2.\]
+      <p><b>Imagen.</b> Columnas 1 y 3 son LI: \((1,1,1)\to1+(1+x)+(1-x^2)=3+x-x^2\); \((0,0,2)\to2(1-x^2)\). Simplificando con combinaciones: \((3+x-x^2)-(1-x^2)=2+x\).</p>
+      <div class="why">Las columnas de \([F]_B\) son las coordenadas en \(B\) de \(F(1),F(1+x),F(1-x^2)\), que generan la imagen. Reemplazar un generador por una combinación con otro no cambia el subespacio generado.</div>
+      <div class="ans">\(\dim\mathrm{Nu}=1\), \(B_{\mathrm{Nu}}=\{3+2x+x^2\}\). \(\dim\mathrm{Im}=2\), \(B_{\mathrm{Im}}=\{2+x,\ 1-x^2\}\).</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p>\([1-x^2]_B=(0,0,1)\), entonces \([S]_B=\{(0,0,k)\}\). \(p\in F^{-1}(S)\iff[F]_B[p]_B=(0,0,k)\) para algún \(k\):</p>
+      \[c_1-c_2=0,\quad c_1-c_2=0,\quad c_1+2c_3=k\ \text{(libre)}.\]
+      <p>La única condición es \(c_1=c_2\): \(c=c_1(1,1,0)+c_3(0,0,1)\). Traduciendo: \((1,1,0)\to2+x\), \((0,0,1)\to1-x^2\).</p>
+      <div class="why">Control de dimensión: \(\dim F^{-1}(S)=\dim\mathrm{Nu}F+\dim(S\cap\mathrm{Im}F)=1+1=2\), porque \(1-x^2\in\mathrm{Im}F\). Y \(\mathrm{Nu}(F)\subseteq F^{-1}(S)\): \((2,2,-1)\) cumple \(c_1=c_2\). ✓</div>
+      <div class="ans">\(B_{F^{-1}(S)}=\{2+x,\ 1-x^2\}\).</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="2019-3"><div class="ex-h"><h3>Ejercicio 3 <a class="pill" href="#modelo-3">Modelo 3</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">\(A=\begin{pmatrix}5&0&0\\-1&3&-1\\-2&-4&3\end{pmatrix}\), \(B=5A^{-1}+2I\).<br>a) Halle autovalores y espacios propios de \(A\). b) Sin calcular \(B\), halle si es posible \(P\) y \(D\) con \(B=PDP^{-1}\).</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>Desarrollando por la fila 1: \(p_A(\lambda)=(5-\lambda)\big[(3-\lambda)^2-4\big]=(5-\lambda)(\lambda-1)(\lambda-5)\). Autovalores: \(5\) (doble), \(1\). Control: \(5+5+1=11=\mathrm{tr}A\). ✓</p>
+      <p><b>\(\lambda=5\)</b>: \(A-5I=\begin{pmatrix}0&0&0\\-1&-2&-1\\-2&-4&-2\end{pmatrix}\), rango 1 ⇒ \(\dim S_5=2\). Ecuación \(x+2y+z=0\).</p>
+      <p><b>\(\lambda=1\)</b>: \(A-I=\begin{pmatrix}4&0&0\\-1&2&-1\\-2&-4&2\end{pmatrix}\): \(x=0\), \(2y-z=0\).</p>
+      <div class="ans">\(S_5=\mathrm{gen}\{(-2,1,0),(-1,0,1)\}\), \(S_1=\mathrm{gen}\{(0,1,2)\}\).</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p>0 no es autovalor de \(A\) ⇒ \(A\) inversible. Si \(Av=\lambda v\): \(A^{-1}v=\frac1\lambda v\) y</p>
+      \[Bv=5A^{-1}v+2v=\Big(\frac5\lambda+2\Big)v.\]
+      <p>\(\lambda=5\to3\), \(\lambda=1\to7\). Los tres autovectores de \(A\) son una base de \(\mathbb R^3\) (dos de \(S_5\) LI y uno de otro autovalor) formada por autovectores de \(B\), entonces \(B\) diagonaliza.</p>
+      <div class="ans">\(P=\begin{pmatrix}-2&-1&0\\1&0&1\\0&1&2\end{pmatrix}\), \(D=\mathrm{diag}(3,3,7)\).</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="2019-4"><div class="ex-h"><h3>Ejercicio 4 <a class="pill" href="#modelo-4">Modelo 4</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">En \(P_1\): \(\langle p,q\rangle=p(1)q(1)+p'(1)q'(1)\).<br>a) Pruebe el axioma 4. b) Dado \(H=\{p\in P_1:p(1)+p'(1)=0\}\), halle \(H^\perp\) y una base.</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>\(\langle p,p\rangle=p(1)^2+p'(1)^2\ge0\). Si \(\langle p,p\rangle=0\), entonces \(p(1)=0\) y \(p'(1)=0\). Con \(p=a+bx\): \(p'(1)=b=0\) y \(p(1)=a+b=0\Rightarrow a=0\), o sea \(p=0\). Recíprocamente, \(p=0\Rightarrow\langle p,p\rangle=0\).</p>
+      <div class="why">Es clave que el espacio sea \(P_1\). En \(P_2\), \(p=(x-1)^2\neq0\) cumple \(p(1)=p'(1)=0\) y el axioma fallaría.</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p>\(p=a+bx\in H\iff(a+b)+b=0\iff a=-2b\). Entonces \(H=\mathrm{gen}\{x-2\}\), \(\dim H=1\) y \(\dim H^\perp=1\).</p>
+      <p>\(\langle p,x-2\rangle=p(1)\cdot(-1)+p'(1)\cdot1=-(a+b)+b=-a=0\). Entonces \(H^\perp=\{b\,x\}\).</p>
+      <div class="ans">\(H^\perp=\mathrm{gen}\{x\}\), base \(\{x\}\). Control: \(\langle x,x-2\rangle=1\cdot(-1)+1\cdot1=0\). ✓</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="2019-5"><div class="ex-h"><h3>Ejercicio 5 <a class="pill" href="#modelo-5">Modelo 5</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">V o F. a) Si \(A\in\mathbb R^{n\times n}\) es no inversible, entonces \(A\) no es diagonalizable. b) Si \(\{u,v,w\}\) es ortonormal (espacio real), entonces \(\{2u-v,\ u+2v,\ 3w\}\) es ortogonal.</div>
+    <details class="sol"><summary>Resolución</summary><div>
+      <p><b>a) Falso.</b> \(A=\begin{pmatrix}1&0\\0&0\end{pmatrix}\): \(\det A=0\) (no inversible) y es diagonal, por lo tanto diagonalizable (\(P=I\)).</p>
+      <div class="why">Inversibilidad depende de que 0 no sea autovalor; diagonalización depende de \(m.g.=m.a.\). Son propiedades independientes.</div>
+      <p><b>b) Verdadero.</b> Usando bilinealidad, simetría, \(\langle u,u\rangle=\langle v,v\rangle=1\) y \(\langle u,v\rangle=\langle u,w\rangle=\langle v,w\rangle=0\):</p>
+      \[\langle2u-v,u+2v\rangle=2\langle u,u\rangle+4\langle u,v\rangle-\langle v,u\rangle-2\langle v,v\rangle=2-2=0,\]
+      \[\langle2u-v,3w\rangle=6\langle u,w\rangle-3\langle v,w\rangle=0,\qquad\langle u+2v,3w\rangle=3\langle u,w\rangle+6\langle v,w\rangle=0.\]
+      <p>Los tres pares son ortogonales.</p>
+    </div></details>
+  </div></div>
+</section>
+
+<!-- ============================ PARCIAL 2024 ============================ -->
+<section class="view" id="v-p-2024">
+  <h1>Segundo parcial · 1er cuatrimestre 2024</h1>
+  <p class="lead">13 de junio de 2024.</p>
+
+  <div class="ex" data-ex="2024-1"><div class="ex-h"><h3>Ejercicio 1 <a class="pill" href="#modelo-1">Modelo 1</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">\(G:P_2\to\mathbb R^3\), \(G(p)=\big(p(0),\ p(0)+p(1),\ 2p(1)\big)^T\).<br>a) Pruebe que \(G\) es TL. b) Analice si \(G\) es isomorfismo.</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>Para \(p,q\in P_2\), \(\alpha\in\mathbb R\): \((p+q)(a)=p(a)+q(a)\) y \((\alpha p)(a)=\alpha p(a)\). Entonces cada componente de \(G(p+q)\) es la suma de las de \(G(p)\) y \(G(q)\), y cada componente de \(G(\alpha p)\) es \(\alpha\) por la de \(G(p)\).</p>
+      \[G(p+q)=\big(p(0)+q(0),\ p(0)+q(0)+p(1)+q(1),\ 2p(1)+2q(1)\big)=G(p)+G(q).\]
+      <div class="ans">\(G\) es TL.</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p>\(G(p)\) depende solo de \(p(0)\) y \(p(1)\). El polinomio \(p=x-x^2\) cumple \(p(0)=0\), \(p(1)=0\), así que \(G(x-x^2)=(0,0,0)\) con \(x-x^2\neq0\).</p>
+      <div class="why">\(\mathrm{Nu}(G)\neq\{0\}\) ⇒ \(G\) no es inyectiva ⇒ no es isomorfismo. En detalle, con \(p=a+bx+cx^2\): \(a=0\), \(a+b+c=0\), da \(\mathrm{Nu}(G)=\mathrm{gen}\{x-x^2\}\), \(\dim\mathrm{Nu}=1\), y por el teorema de la dimensión \(\dim\mathrm{Im}=2&lt;3\): tampoco es epimorfismo.</div>
+      <div class="ans">\(G\) no es isomorfismo: \(\mathrm{Nu}(G)=\mathrm{gen}\{x-x^2\}\neq\{0\}\).</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="2024-2"><div class="ex-h"><h3>Ejercicio 2 <a class="pill" href="#modelo-2">Modelo 2</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">\(T:P_2\to P_2\), \(B=\{2-x,\ 2+x,\ 4+x^2\}\), \([T]_B=\begin{pmatrix}1&3&1\\1&1&0\\0&2&1\end{pmatrix}\).<br>a) Base de \(\mathrm{Nu}(T)\) y de \(\mathrm{Im}(T)\). b) Todos los \(p\in P_2\) con \(T(p)=4\).</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p><b>Rango.</b> Fila 1 = fila 2 + fila 3, y las filas 2 y 3 son LI: rango 2. Entonces \(\dim\mathrm{Im}=2\) y \(\dim\mathrm{Nu}=1\).</p>
+      <p><b>Núcleo.</b> \(c_1+c_2=0\), \(2c_2+c_3=0\Rightarrow c=t(1,-1,2)\):</p>
+      \[p=(2-x)-(2+x)+2(4+x^2)=8-2x+2x^2=2(4-x+x^2).\]
+      <p><b>Imagen.</b> Columna 1 \((1,1,0)\to(2-x)+(2+x)=4\); columna 3 \((1,0,1)\to(2-x)+(4+x^2)=6-x+x^2\). Son LI. Simplificando: \(\{1,\ x^2-x\}\).</p>
+      <div class="ans">\(B_{\mathrm{Nu}}=\{4-x+x^2\}\). \(B_{\mathrm{Im}}=\{1,\ x^2-x\}\) (o \(\{4,\ 6-x+x^2\}\)).</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p><b>Coordenadas de 4.</b> \(c_1(2-x)+c_2(2+x)+c_3(4+x^2)=4\Rightarrow c_3=0\), \(c_1=c_2\), \(2c_1+2c_2=4\Rightarrow[4]_B=(1,1,0)\).</p>
+      <p><b>Sistema</b> \([T]_Bc=(1,1,0)\): \(c_1+c_2=1\), \(2c_2+c_3=0\) (la primera ecuación es la suma de las otras). Una solución particular es \(c=(1,0,0)\), es decir \(p_0=2-x\).</p>
+      <div class="why">\(4\in\mathrm{Im}(T)\) (es \(T(2-x)\), la primera columna), entonces hay solución. Todas las soluciones son \(p_0+\mathrm{Nu}(T)\), porque \(T(p)=T(p_0)\iff p-p_0\in\mathrm{Nu}(T)\).</div>
+      <div class="ans">\(p=2-x+t(4-x+x^2)\), \(t\in\mathbb R\).</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="2024-3"><div class="ex-h"><h3>Ejercicio 3 <a class="pill" href="#modelo-3">Modelo 3</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">\(A=\begin{pmatrix}1&-2&2\\3&6&-3\\0&0&3\end{pmatrix}\). a) Autovalores y espacios propios. b) \(B=12A^{-1}+2I\): halle \(P\) y \(D\) con \(B=PDP^{-1}\).</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>Por la fila 3: \(p_A(\lambda)=(3-\lambda)\big[(1-\lambda)(6-\lambda)+6\big]=(3-\lambda)(\lambda^2-7\lambda+12)=(3-\lambda)(\lambda-3)(\lambda-4)\). Autovalores \(3\) (doble), \(4\). Control: \(3+3+4=10=\mathrm{tr}A\). ✓</p>
+      <p><b>\(\lambda=3\)</b>: \(A-3I=\begin{pmatrix}-2&-2&2\\3&3&-3\\0&0&0\end{pmatrix}\), rango 1 ⇒ \(\dim S_3=2\). Ecuación \(x+y-z=0\).</p>
+      <p><b>\(\lambda=4\)</b>: \(A-4I=\begin{pmatrix}-3&-2&2\\3&2&-3\\0&0&-1\end{pmatrix}\): \(z=0\), \(3x+2y=0\).</p>
+      <div class="ans">\(S_3=\mathrm{gen}\{(-1,1,0),(1,0,1)\}\), \(S_4=\mathrm{gen}\{(2,-3,0)\}\). Diagonaliza.</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p>\(A\) inversible (0 no es autovalor). \(Av=\lambda v\Rightarrow Bv=\big(\frac{12}\lambda+2\big)v\): \(\lambda=3\to6\), \(\lambda=4\to5\).</p>
+      <div class="ans">\(P=\begin{pmatrix}-1&1&2\\1&0&-3\\0&1&0\end{pmatrix}\), \(D=\mathrm{diag}(6,6,5)\).</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="2024-4"><div class="ex-h"><h3>Ejercicio 4 <a class="pill" href="#modelo-4">Modelo 4</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">En \(P_2\): \(\langle a_0+a_1x+a_2x^2,\ b_0+b_1x+b_2x^2\rangle=a_0b_0+a_1b_1+a_2b_2\).<br>a) \(S=\{p\in P_2:p(0)+p(1)=0\}\): base de \(S^\perp\). b) \(q=1+x^2\): todos los \(p\in S^\perp\) con \(d(p,q)=\sqrt{14}\).</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>\(p(0)+p(1)=a_0+(a_0+a_1+a_2)=2a_0+a_1+a_2=\langle p,\ 2+x+x^2\rangle\).</p>
+      <div class="why">La condición que define \(S\) es exactamente “ser ortogonal a \(w=2+x+x^2\)”: \(S=\{w\}^\perp=(\mathrm{gen}\{w\})^\perp\). Entonces \(S^\perp=\mathrm{gen}\{w\}\). Control: \(\dim S=2\) (una ecuación en \(P_2\)), \(\dim S^\perp=3-2=1\). ✓</div>
+      <div class="ans">\(B_{S^\perp}=\{2+x+x^2\}\).</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p>\(p=k(2+x+x^2)\), \(p-q=(2k-1)+kx+(k-1)x^2\).</p>
+      \[\|p-q\|^2=(2k-1)^2+k^2+(k-1)^2=6k^2-6k+2=14\Rightarrow k^2-k-2=0\Rightarrow k=2\ \text{o}\ k=-1.\]
+      <div class="why">Elevamos al cuadrado para evitar la raíz; ambos lados son no negativos, así que no se agregan soluciones.</div>
+      <div class="ans">\(p=4+2x+2x^2\) o \(p=-2-x-x^2\).</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="2024-5"><div class="ex-h"><h3>Ejercicio 5 <a class="pill" href="#modelo-5">Modelo 5</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">a) \(A\in\mathbb R^{3\times3}\), \(\mathrm{rango}(A-2I)=1\), \(A(-2,1,2)^T=(6,-3,-6)^T\). Halle \(\mathrm{tr}(A^5)\).<br>b) V o F: si \(u\perp v\), entonces \(\|u+2v\|=\|u\|+2\|v\|\).</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <ol class="steps">
+        <li>\(\mathrm{rango}(A-2I)=1&lt;3\Rightarrow\det(A-2I)=0\): \(2\) es autovalor, con \(m.g.(2)=3-1=2\) (teorema de la dimensión).</li>
+        <li>\((6,-3,-6)=-3(-2,1,2)\): \(-3\) es autovalor con autovector \((-2,1,2)\).</li>
+        <li>\(m.a.(2)\ge m.g.(2)=2\), hay otro autovalor \(-3\), y las \(m.a.\) suman 3 ⇒ autovalores \(2,2,-3\). Además \(A\) diagonaliza (\(m.g.=m.a.\) para ambos).</li>
+        <li>\(A=PDP^{-1}\Rightarrow A^5=PD^5P^{-1}\); la traza es invariante por semejanza: \(\mathrm{tr}(A^5)=2^5+2^5+(-3)^5=32+32-243\).</li>
+      </ol>
+      <div class="ans">\(\mathrm{tr}(A^5)=-179\).</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p><b>Falso.</b> \(\mathbb R^2\) usual, \(u=(1,0)\), \(v=(0,1)\): \(\|u+2v\|=\|(1,2)\|=\sqrt5\), pero \(\|u\|+2\|v\|=3\).</p>
+      <div class="why">Por Pitágoras (\(u\perp2v\)): \(\|u+2v\|^2=\|u\|^2+4\|v\|^2\), que no es \((\|u\|+2\|v\|)^2\) salvo que \(u=0\) o \(v=0\).</div>
+    </div></details>
+  </div></div>
+</section>
+
+<!-- ============================ PARCIAL VIEJO ============================ -->
+<section class="view" id="v-p-viejo">
+  <h1>Parcial viejo (foto)</h1>
+  <p class="lead">El que subiste como imagen. Acá producto interno es el ejercicio 3 y autovalores el 4.</p>
+
+  <div class="ex" data-ex="v-1"><div class="ex-h"><h3>Ejercicio 1 <a class="pill" href="#modelo-1">Modelo 1</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">\(G:P_2\to\mathbb R^3\), \(G(p)=\big(p(1),\ p'(1),\ p''(1)\big)^T\). a) Pruebe que \(G\) es TL. b) Analice si \(G\) es isomorfismo.</div>
+    <details class="sol"><summary>Resolución</summary><div>
+      <p><b>a)</b> Evaluar en 1 y derivar son operaciones lineales: \((p+q)^{(k)}(1)=p^{(k)}(1)+q^{(k)}(1)\) y \((\alpha p)^{(k)}(1)=\alpha p^{(k)}(1)\). Componente a componente, \(G(p+q)=G(p)+G(q)\) y \(G(\alpha p)=\alpha G(p)\).</p>
+      <p><b>b)</b> \(\dim P_2=\dim\mathbb R^3\) ⇒ basta ver el núcleo. Con \(p=a+bx+cx^2\): \(p''(1)=2c\), \(p'(1)=b+2c\), \(p(1)=a+b+c\).</p>
+      \[G(p)=0\iff 2c=0,\ b+2c=0,\ a+b+c=0\iff a=b=c=0.\]
+      <div class="why">\(\mathrm{Nu}(G)=\{0\}\) ⇒ monomorfismo; con dimensiones iguales es isomorfismo. Interpretación: un polinomio de grado ≤ 2 queda determinado por su valor y sus dos derivadas en un punto (desarrollo de Taylor en \(x=1\)).</div>
+      <div class="ans">\(G\) es isomorfismo.</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="v-2"><div class="ex-h"><h3>Ejercicio 2 <a class="pill" href="#modelo-2">Modelo 2</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">\(T:P_2\to P_2\), \(B=\{1-x,\ 1+x,\ 1+x^2\}\), \([T]_B=\begin{pmatrix}1&2&1\\1&3&2\\0&1&1\end{pmatrix}\).<br>a) Base de \(\mathrm{Nu}(T)\) y de \(\mathrm{Im}(T)\). b) Todos los \(p\) con \(T(p)=4\).</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>Fila 2 = fila 1 + fila 3 ⇒ rango 2 ⇒ \(\dim\mathrm{Im}=2\), \(\dim\mathrm{Nu}=1\).</p>
+      <p><b>Núcleo:</b> \(c_2+c_3=0\), \(c_1+2c_2+c_3=0\Rightarrow c=t(-1,1,-1)\Rightarrow p=-(1-x)+(1+x)-(1+x^2)=-1+2x-x^2\).</p>
+      <p><b>Imagen:</b> columna 1 \((1,1,0)\to(1-x)+(1+x)=2\); columna 3 \((1,2,1)\to(1-x)+2(1+x)+(1+x^2)=4+x+x^2\). LI.</p>
+      <div class="ans">\(B_{\mathrm{Nu}}=\{1-2x+x^2\}=\{(1-x)^2\}\). \(B_{\mathrm{Im}}=\{1,\ x+x^2\}\).</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p>\([4]_B\): \(c_3=0\), \(c_1=c_2\), \(c_1+c_2=4\Rightarrow(2,2,0)\). Sistema \([T]_Bc=(2,2,0)\): \(c_2+c_3=0\), \(c_1+c_2=2\). Particular: \(c=(2,0,0)\), es decir \(p_0=2(1-x)\).</p>
+      <div class="ans">\(p=2-2x+t(1-2x+x^2)\), \(t\in\mathbb R\).</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="v-3"><div class="ex-h"><h3>Ejercicio 3 <a class="pill" href="#modelo-4">Modelo 4</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">En \(\mathbb R^2\): \(\langle X,Y\rangle=X^TAY\), \(A=\begin{pmatrix}1&1\\1&2\end{pmatrix}\). a) Pruebe que \(X^TAX>0\) para todo \(X\neq0\). b) \(S=\{(x,y):2x+y=0\}\): halle una base de \(S^\perp\).</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>Con \(X=(x,y)^T\): \(X^TAX=x^2+2xy+2y^2=(x+y)^2+y^2\ge0\).</p>
+      <p>Si fuera \(0\): \(y=0\) y \(x+y=0\Rightarrow x=0\), es decir \(X=0\). Por lo tanto, para \(X\neq0\), \(X^TAX>0\).</p>
+      <div class="why">Completar cuadrados convierte la forma cuadrática en suma de cuadrados, cuyo signo es evidente.</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p>\(S=\mathrm{gen}\{(1,-2)\}\), \(\dim S^\perp=2-1=1\). \(A(1,-2)^T=(-1,-3)^T\), entonces \(\langle(x,y),(1,-2)\rangle=-x-3y=0\).</p>
+      <div class="trap">Con el producto usual saldría \((2,1)\), que está mal: hay que usar \(X^TAY\).</div>
+      <div class="ans">\(B_{S^\perp}=\{(3,-1)\}\). Control: \((3,-1)\cdot(-1,-3)=-3+3=0\). ✓</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="v-4"><div class="ex-h"><h3>Ejercicio 4 <a class="pill" href="#modelo-3">Modelo 3</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">\(A=\begin{pmatrix}2&1&0\\4&2&0\\0&0&4\end{pmatrix}\). a) Autovalores y espacios propios. b) \(B=(A^3-60I)^{100}\): halle \(P\) y \(D\) con \(B=PDP^{-1}\).</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>Por la columna 3: \(p_A(\lambda)=(4-\lambda)\big[(2-\lambda)^2-4\big]=(4-\lambda)\,\lambda\,(\lambda-4)\). Autovalores \(0\), \(4\) (doble). Control: \(0+4+4=8=\mathrm{tr}A\). ✓</p>
+      <p><b>\(\lambda=0\)</b>: \(2x+y=0\), \(z=0\Rightarrow(1,-2,0)\).</p>
+      <p><b>\(\lambda=4\)</b>: \(A-4I=\begin{pmatrix}-2&1&0\\4&-2&0\\0&0&0\end{pmatrix}\), rango 1 ⇒ \(\dim S_4=2\): \(y=2x\), \(z\) libre.</p>
+      <div class="ans">\(S_0=\mathrm{gen}\{(1,-2,0)\}\), \(S_4=\mathrm{gen}\{(1,2,0),(0,0,1)\}\). Diagonaliza.</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      <p>\(B=q(A)\) con \(q(t)=(t^3-60)^{100}\). Si \(Av=\lambda v\): \(Bv=(\lambda^3-60)^{100}v\). \(\lambda=0\to(-60)^{100}=60^{100}\); \(\lambda=4\to(64-60)^{100}=4^{100}\).</p>
+      <div class="why">Acá \(A\) no es inversible (0 es autovalor), pero no importa: \(B\) es un polinomio en \(A\), no usa \(A^{-1}\).</div>
+      <div class="ans">\(P=\begin{pmatrix}1&1&0\\-2&2&0\\0&0&1\end{pmatrix}\), \(D=\mathrm{diag}(60^{100},4^{100},4^{100})\).</div>
+    </div></details>
+  </div></div>
+
+  <div class="ex" data-ex="v-5"><div class="ex-h"><h3>Ejercicio 5 <a class="pill" href="#modelo-5">Modelo 5</a></h3><label class="done"><input type="checkbox"> Lo resolví bien</label></div><div class="ex-b">
+    <div class="stmt">a) \(A\in\mathbb R^{2\times2}\), \(\mathrm{traza}(A)=5\), \(A(-2,5)^T=(-4,10)^T\). Halle la traza de \(A^3\).<br>b) \(V\) real con producto interno. Si \(\|u\|=\|v\|\), pruebe que \(u+v\) y \(u-v\) son ortogonales.</div>
+    <details class="sol"><summary>Resolución a)</summary><div>
+      <p>\((-4,10)=2(-2,5)\Rightarrow\lambda_1=2\). Como \(\mathrm{tr}A=\lambda_1+\lambda_2=5\), \(\lambda_2=3\). Son distintos ⇒ \(A\) diagonaliza ⇒ los autovalores de \(A^3\) son \(8\) y \(27\).</p>
+      <div class="ans">\(\mathrm{tr}(A^3)=8+27=35\).</div>
+    </div></details>
+    <details class="sol"><summary>Resolución b)</summary><div>
+      \[\langle u+v,u-v\rangle=\langle u,u\rangle-\langle u,v\rangle+\langle v,u\rangle-\langle v,v\rangle=\|u\|^2-\|v\|^2=0.\]
+      <div class="why">Se usa bilinealidad y simetría (\(\langle u,v\rangle=\langle v,u\rangle\) porque el espacio es real). Geométricamente: las diagonales de un rombo son perpendiculares.</div>
+    </div></details>
+  </div></div>
+</section>
+
+<!-- ============================ QUIZ ============================ -->
+<section class="view" id="v-quiz">
+  <h1>Autoevaluación</h1>
+  <p class="lead">Preguntas cortas sobre las decisiones clave de cada modelo. Cada respuesta trae la justificación.</p>
+  <div class="row">
+    <label for="qFilter">Modelo:</label>
+    <select id="qFilter"><option value="all">Todos</option><option value="1">Modelo 1</option><option value="2">Modelo 2</option><option value="3">Modelo 3</option><option value="4">Modelo 4</option><option value="5">Modelo 5</option></select>
+    <button class="btn ghost" id="qReset">Reiniciar</button>
+    <span id="qScore" class="uses"></span>
+  </div>
+  <div id="quizBox"></div>
+</section>
+
+<!-- ============================ SIMULACRO ============================ -->
+<section class="view" id="v-simulacro">
+  <h1>Simulacro de parcial</h1>
+  <p class="lead">Elegí un parcial, resolvelo en papel con el reloj y después autocorregite con la lista de control. Aprobás con 2 ejercicios bien.</p>
+  <div class="card">
+    <div class="row">
+      <label for="simSel">Parcial:</label>
+      <select id="simSel"><option value="probable">Parcial probable (los que más entran)</option><option value="p-2018">1er cuat. 2018</option><option value="p-2019">1er cuat. 2019</option><option value="p-2024">1er cuat. 2024</option><option value="p-viejo">Parcial viejo (foto)</option></select>
+      <button class="btn" id="simStart">Empezar (2 h)</button>
+      <button class="btn ghost" id="simStop">Terminar y corregir</button>
+    </div>
+    <p class="timer" id="simTimer" aria-live="polite">2:00:00</p>
+  </div>
+  <div id="simBox"></div>
+  <div id="simCheck" style="display:none">
+    <h2>Lista de control para autocorregirte</h2>
+    <p>Abrí la resolución de cada ejercicio y marcá cada ítem que cumpliste.</p>
+    <div id="simCheckList"></div>
+    <div class="card"><b id="simResult">Ejercicios bien: 0 de 5</b></div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+(function(){
+  // ---------- Navegación por hash ----------
+  const views=[...document.querySelectorAll('section.view')].map(s=>s.id.slice(2));
+  const side=document.getElementById('side');
+  function show(){
+    let id=location.hash.slice(1);
+    if(!views.includes(id)) id='inicio';
+    document.querySelectorAll('section.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+id));
+    document.querySelectorAll('nav.side a').forEach(a=>a.classList.toggle('active',a.dataset.v===id));
+    side.classList.remove('open');
+    window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange',show); show();
+  document.getElementById('menuBtn').addEventListener('click',()=>side.classList.toggle('open'));
+  document.querySelectorAll('[data-jump]').forEach(a=>a.addEventListener('click',e=>{
+    e.preventDefault(); const t=document.querySelector('.ex[data-ex="'+a.dataset.jump+'"]');
+    if(t) t.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  }));
+
+  // ---------- Progreso ----------
+  const KEY='alg2-progreso';
+  let prog={}; try{prog=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  const exs=[...document.querySelectorAll('.ex[data-ex]')];
+  function upd(){
+    const n=exs.filter(e=>prog[e.dataset.ex]).length;
+    document.getElementById('progTxt').textContent=n+' de '+exs.length+' ejercicios marcados';
+    document.getElementById('progBar').style.width=(100*n/exs.length)+'%';
+  }
+  exs.forEach(e=>{const cb=e.querySelector('.done input');cb.checked=!!prog[e.dataset.ex];
+    cb.addEventListener('change',()=>{prog[e.dataset.ex]=cb.checked;try{localStorage.setItem(KEY,JSON.stringify(prog))}catch(err){}upd();});});
+  upd();
+
+  // ---------- Quiz ----------
+  const Q=[
+    {m:1,q:'\\(T:P_2\\to\\mathbb R^3\\) es TL y encontrás \\(\\mathrm{Nu}(T)=\\{0\\}\\). ¿Qué podés concluir?',o:['Solo que es monomorfismo','Que es isomorfismo','Nada sin calcular la imagen'],a:1,e:'\\(\\dim P_2=\\dim\\mathbb R^3=3\\). Por el teorema de la dimensión, \\(\\dim\\mathrm{Im}=3-0=3\\), entonces es epi también: isomorfismo.'},
+    {m:1,q:'Para probar que \\(T\\) es TL, ¿alcanza con verificar \\(T(0)=0\\)?',o:['Sí','No, es necesario pero no suficiente','Solo en dimensión finita'],a:1,e:'\\(T(0)=0\\) es consecuencia de ser TL, sirve para descartar. \\(T(x)=x^2\\) cumple \\(T(0)=0\\) y no es lineal.'},
+    {m:1,q:'\\(T:P_3\\to\\mathbb R^3\\) lineal. ¿Puede ser isomorfismo?',o:['Sí, si el núcleo es trivial','No, porque \\(\\dim P_3=4\\neq3\\)','Depende de la fórmula'],a:1,e:'Un isomorfismo conserva la dimensión. Además \\(\\dim\\mathrm{Nu}=4-\\dim\\mathrm{Im}\\ge1\\): nunca es inyectiva.'},
+    {m:1,q:'\\(G(p)=(p(0),p(1),p(0)-p(1))\\) en \\(P_2\\). ¿Es isomorfismo?',o:['Sí','No: \\(x-x^2\\) está en el núcleo','No: no es lineal'],a:1,e:'Solo depende de \\(p(0)\\) y \\(p(1)\\). Cualquier polinomio que se anule en 0 y 1 cae en el núcleo.'},
+    {m:2,q:'Resolviste \\([T]_Bc=0\\) y obtuviste \\(c=(1,-1,2)\\). ¿Cuál es la base de \\(\\mathrm{Nu}(T)\\)?',o:['\\(\\{(1,-1,2)\\}\\)','\\(\\{1\\cdot b_1-1\\cdot b_2+2\\cdot b_3\\}\\)','\\(\\{1-x+2x^2\\}\\) siempre'],a:1,e:'\\(c\\) son coordenadas en \\(B\\). El vector del núcleo es la combinación de los elementos de \\(B\\). \\(1-x+2x^2\\) solo si \\(B\\) es la canónica.'},
+    {m:2,q:'\\(B=\\{2-x,2+x,4+x^2\\}\\). ¿Cuáles son las coordenadas de \\(q=4\\)?',o:['\\((4,0,0)\\)','\\((1,1,0)\\)','\\((0,0,1)\\)'],a:1,e:'\\((2-x)+(2+x)=4\\). Siempre resolvé \\(c_1b_1+c_2b_2+c_3b_3=q\\).'},
+    {m:2,q:'\\([T]_B\\) es \\(3\\times3\\) con rango 2. ¿Dimensión del núcleo?',o:['2','1','0'],a:1,e:'Teorema de la dimensión: \\(3-2=1\\).'},
+    {m:2,q:'Si \\(T(p_0)=q\\), ¿cómo son todas las soluciones de \\(T(p)=q\\)?',o:['Solo \\(p_0\\)','\\(p_0+n\\), \\(n\\in\\mathrm{Nu}(T)\\)','\\(p_0+w\\), \\(w\\in\\mathrm{Im}(T)\\)'],a:1,e:'\\(T(p)=T(p_0)\\iff T(p-p_0)=0\\iff p-p_0\\in\\mathrm{Nu}(T)\\).'},
+    {m:3,q:'\\(A\\) \\(3\\times3\\), \\(\\lambda\\) autovalor doble, \\(\\mathrm{rango}(A-\\lambda I)=2\\). ¿Diagonaliza?',o:['Sí','No','Faltan datos'],a:1,e:'\\(m.g.=3-2=1&lt;2=m.a.\\). No hay suficientes autovectores LI.'},
+    {m:3,q:'\\(Av=\\lambda v\\), \\(\\lambda\\neq0\\). ¿Qué vale \\((3A^{-1}+I)v\\)?',o:['\\((3\\lambda+1)v\\)','\\((3/\\lambda+1)v\\)','No se puede saber sin \\(A^{-1}\\)'],a:1,e:'\\(A^{-1}v=\\tfrac1\\lambda v\\), así que \\((3A^{-1}+I)v=(\\tfrac3\\lambda+1)v\\).'},
+    {m:3,q:'\\(B=(A^T+I)^{10}\\). ¿Los autovectores de \\(B\\) son los de \\(A\\)?',o:['Sí, siempre','No: son los de \\(A^T\\)','Solo si \\(A\\) es inversible'],a:1,e:'\\(A^T\\) tiene los mismos autovalores pero en general otros autovectores (salvo \\(A\\) simétrica).'},
+    {m:3,q:'Te piden \\(B=PDP^{-1}\\) con \\(B=5A^{-1}+2I\\). ¿Hace falta calcular \\(A^{-1}\\)?',o:['Sí','No, alcanza con autovalores y autovectores de \\(A\\)','Solo para \\(D\\)'],a:1,e:'\\(B\\) comparte autovectores con \\(A\\); sus autovalores son \\(5/\\lambda+2\\).'},
+    {m:3,q:'¿Qué control rápido tenés para los autovalores?',o:['Suman \\(\\mathrm{tr}(A)\\)','Suman \\(\\det(A)\\)','Suman el rango'],a:0,e:'\\(\\mathrm{tr}A=\\sum\\lambda_i\\) y \\(\\det A=\\prod\\lambda_i\\).'},
+    {m:4,q:'En \\(P_2\\), \\(\\langle p,q\\rangle=p(1)q(1)+p\'(1)q\'(1)\\). ¿Es producto interno?',o:['Sí','No: \\((x-1)^2\\neq0\\) tiene \\(\\langle p,p\\rangle=0\\)','No: no es simétrico'],a:1,e:'Falla el axioma 4. En \\(P_1\\) sí funciona.'},
+    {m:4,q:'En \\(V\\) de dimensión 3, \\(S\\) tiene dimensión 1. ¿\\(\\dim S^\\perp\\)?',o:['1','2','3'],a:1,e:'\\(\\dim S+\\dim S^\\perp=\\dim V\\).'},
+    {m:4,q:'\\(S=\\mathrm{gen}\\{s_1,s_2\\}\\). Para \\(p\\in S^\\perp\\), ¿qué hay que verificar?',o:['\\(\\langle p,s_1+s_2\\rangle=0\\)','\\(\\langle p,s_1\\rangle=0\\) y \\(\\langle p,s_2\\rangle=0\\)','\\(\\langle p,p\\rangle=0\\)'],a:1,e:'Por linealidad, ortogonal a los generadores implica ortogonal a todo \\(S\\). Solo la suma no alcanza.'},
+    {m:4,q:'\\(\\|w\\|=\\sqrt5\\). ¿Cuántos \\(p=kw\\) tienen \\(\\|p\\|=5\\)?',o:['Uno','Dos','Infinitos'],a:1,e:'\\(|k|\\sqrt5=5\\Rightarrow k=\\pm\\sqrt5\\).'},
+    {m:5,q:'“Si \\(A\\) es diagonalizable, entonces es inversible.”',o:['Verdadero','Falso'],a:1,e:'La matriz nula es diagonal y no inversible.'},
+    {m:5,q:'\\(u\\perp v\\). ¿Cuál vale siempre?',o:['\\(\\|u+v\\|=\\|u\\|+\\|v\\|\\)','\\(\\|u+v\\|^2=\\|u\\|^2+\\|v\\|^2\\)','\\(\\|u+v\\|=0\\)'],a:1,e:'Pitágoras.'},
+    {m:2,q:'Al resolver \\([T]_Bc=[q]_B\\) la última ecuación queda \\(0=1\\). ¿Qué respondés?',o:['Que \\(p=0\\)','Que no existe \\(p\\): \\(q\\notin\\mathrm{Im}(T)\\)','Que \\(p\\) está en el núcleo'],a:1,e:'Sistema incompatible ⇒ \\(q\\) no está en la imagen ⇒ no hay ningún \\(p\\) con \\(T(p)=q\\). Así pasa en la clase 19/11, ej. 2.'},
+    {m:2,q:'Planteando \\(T^{-1}(S)\\) te queda que el parámetro \\(k\\) de \\(S\\) tiene que ser 0. ¿Qué es \\(T^{-1}(S)\\)?',o:['El conjunto vacío','\\(\\mathrm{Nu}(T)\\)','Todo \\(P_2\\)'],a:1,e:'Solo el vector nulo de \\(S\\) está en la imagen, así que \\(T^{-1}(S)=T^{-1}(\\{0\\})=\\mathrm{Nu}(T)\\). Nunca es vacío: contiene al núcleo.'},
+    {m:4,q:'Querés \\(\\mathrm{dist}(w,S)\\). La base de \\(S\\) no es ortogonal pero la de \\(S^\\perp\\) sí. ¿Qué conviene?',o:['Proyectar sobre \\(S^\\perp\\): \\(\\mathrm{dist}=\\|P_{S^\\perp}(w)\\|\\)','Usar la fórmula con la base de \\(S\\) tal cual','No se puede calcular'],a:0,e:'Por descomposición ortogonal, \\(w-P_S(w)=P_{S^\\perp}(w)\\). La fórmula de proyección exige base ortogonal.'},
+    {m:4,q:'¿La fórmula \\(P_S(v)=\\sum\\frac{\\langle v,u_i\\rangle}{\\langle u_i,u_i\\rangle}u_i\\) vale con cualquier base de \\(S\\)?',o:['Sí','No, solo con base ortogonal'],a:1,e:'Con una base no ortogonal da un resultado incorrecto. Primero Gram–Schmidt (o elegir la base ortogonal, como en la clase 19/11, ej. 3).'},
+    {m:3,q:'\\(A\\) tiene autovalores \\(-2,2,4\\) y \\(B=A^6-5A^2\\). ¿Es \\(B\\) diagonalizable?',o:['Sí, con la misma \\(P\\) que \\(A\\)','No, porque 44 es doble','Hay que calcular \\(B\\)'],a:0,e:'Los autovectores de \\(A\\) son base y son autovectores de \\(B\\). Que \\(q(-2)=q(2)=44\\) sea doble no importa.'},
+    {m:5,q:'\\(A(v_1+v_2)=v_1+2v_2\\) y \\(A(v_1-v_2)=v_1-2v_2\\). ¿Cuánto vale \\(Av_2\\)?',o:['\\(v_2\\)','\\(2v_2\\)','\\(4v_2\\)'],a:1,e:'Restando: \\(A(2v_2)=4v_2\\Rightarrow Av_2=2v_2\\). Entonces 2 es autovalor con autovector \\(v_2\\).'},
+    {m:5,q:'\\(A\\in\\mathbb R^{3\\times3}\\), \\(\\mathrm{rango}(A-I)=1\\), \\(Av=4v\\) con \\(v\\neq0\\). ¿\\(\\mathrm{tr}(A^2)\\)?',o:['18','6','17'],a:0,e:'\\(m.g.(1)=2\\), y 4 es autovalor: autovalores \\(1,1,4\\). \\(\\mathrm{tr}(A^2)=1+1+16=18\\).'}
+  ];
+  const box=document.getElementById('quizBox'), sel=document.getElementById('qFilter'), sc=document.getElementById('qScore');
+  let st={};
+  function render(){
+    const f=sel.value; box.innerHTML='';
+    Q.forEach((it,i)=>{ if(f!=='all'&&String(it.m)!==f) return;
+      const d=document.createElement('div'); d.className='q';
+      d.innerHTML='<div class="uses">Modelo '+it.m+'</div><div>'+it.q+'</div><div class="opts">'+it.o.map((o,j)=>'<button class="opt" data-j="'+j+'">'+o+'</button>').join('')+'</div><div class="fb"></div>';
+      d.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{
+        if(d.classList.contains('answered')) return;
+        const j=+b.dataset.j; st[i]=(j===it.a); d.classList.add('answered');
+        b.classList.add(j===it.a?'right':'wrong'); d.querySelectorAll('.opt')[it.a].classList.add('right');
+        d.querySelector('.fb').innerHTML='<b>'+(j===it.a?'Correcto.':'No es esa.')+'</b> '+it.e;
+        if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([d.querySelector('.fb')]);
+        score();
+      }));
+      box.appendChild(d);
+    });
+    if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([box]);
+    score();
+  }
+  function score(){const k=Object.keys(st);sc.textContent=k.length?('Puntaje: '+k.filter(x=>st[x]).length+' / '+k.length):'';}
+  sel.addEventListener('change',render);
+  document.getElementById('qReset').addEventListener('click',()=>{st={};render();});
+  function startQuiz(){ if(window.MathJax&&MathJax.startup&&MathJax.startup.promise){MathJax.startup.promise.then(render)} else render(); }
+  if(document.readyState==='complete') startQuiz(); else window.addEventListener('load',startQuiz);
+
+  // ---------- Simulacro ----------
+  const CHK={
+    1:['Probé linealidad con elementos genéricos y nombré la propiedad usada','Calculé el núcleo resolviendo el sistema','Usé el teorema de la dimensión (o igualdad de dimensiones) para concluir','Respuesta final correcta'],
+    2:['Traduje coordenadas a polinomios (bases de polinomios, no de \\(\\mathbb R^3\\))','Calculé coordenadas del dato en la base \\(B\\) antes de resolver','Di dimensiones por rango y teorema de la dimensión','Respuesta final correcta'],
+    3:['Desarrollé el determinante por la fila/columna con ceros y verifiqué con la traza','Calculé \\(\\dim S_\\lambda\\) con el rango','Justifiqué que \\(B\\) comparte autovectores (y la inversibilidad de \\(A\\) si hay \\(A^{-1}\\))','\\(P\\) y \\(D\\) en el mismo orden; respuesta correcta'],
+    4:['Escribí \\(\\langle p,p\\rangle\\) como suma de cuadrados y probé las dos implicaciones','Usé el producto interno del enunciado (no el usual)','Controlé \\(\\dim S^\\perp=\\dim V-\\dim S\\)','Respuesta final correcta'],
+    5:['Si era falso: di un contraejemplo concreto y verificado','Si era verdadero: demostración general con teoremas nombrados','Respuestas correctas en ambos ítems']
+  };
+  const PROBABLE=['c-1','f3-1','f5-4','f2-4','f1-5'];
+  function simExercises(id){
+    if(id==='probable') return PROBABLE.map(k=>document.querySelector('.ex[data-ex="'+k+'"]'));
+    return [...document.getElementById('v-'+id).querySelectorAll('.ex')];
+  }
+  const modelOf={'probable':[1,2,3,4,5],'p-2018':[1,2,3,4,5],'p-2019':[1,2,3,4,5],'p-2024':[1,2,3,4,5],'p-viejo':[1,2,4,3,5]};
+  let t=null,left=7200; const tim=document.getElementById('simTimer');
+  function fmt(s){const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return h+':'+String(m).padStart(2,'0')+':'+String(x).padStart(2,'0');}
+  function loadSim(withSol){
+    const id=document.getElementById('simSel').value, out=document.getElementById('simBox');
+    out.innerHTML='';
+    simExercises(id).forEach((e,i)=>{
+      const c=document.createElement('div'); c.className='card';
+      c.innerHTML='<b>Ejercicio '+(i+1)+'</b>'+e.querySelector('.stmt').outerHTML+(withSol?[...e.querySelectorAll('details.sol')].map(d=>d.outerHTML).join(''):'');
+      out.appendChild(c);
+    });
+    if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([out]);
+  }
+  function buildCheck(){
+    const id=document.getElementById('simSel').value, wrap=document.getElementById('simCheckList'); wrap.innerHTML='';
+    modelOf[id].forEach((m,i)=>{
+      const c=document.createElement('div'); c.className='card';
+      c.innerHTML='<b>Ejercicio '+(i+1)+' · Modelo '+m+'</b><ul class="check">'+CHK[m].map((x,j)=>'<li><label><input type="checkbox" data-ex="'+i+'"> '+x+'</label></li>').join('')+'</ul>';
+      wrap.appendChild(c);
+    });
+    wrap.querySelectorAll('input').forEach(cb=>cb.addEventListener('change',res));
+    if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([wrap]);
+    res();
+  }
+  function res(){
+    let ok=0;
+    document.querySelectorAll('#simCheckList .card').forEach(c=>{const a=[...c.querySelectorAll('input')]; if(a.every(x=>x.checked)) ok++;});
+    document.getElementById('simResult').textContent='Ejercicios bien: '+ok+' de 5 · '+(ok>=2?'Aprobado':'Todavía no alcanza (hacen falta 2)');
+  }
+  document.getElementById('simStart').addEventListener('click',()=>{
+    clearInterval(t); left=7200; tim.textContent=fmt(left); loadSim(false); document.getElementById('simCheck').style.display='none';
+    t=setInterval(()=>{left--; tim.textContent=fmt(Math.max(left,0)); if(left<=0){clearInterval(t); finish();}},1000);
+  });
+  function finish(){clearInterval(t); loadSim(true); buildCheck(); document.getElementById('simCheck').style.display='block';}
+  document.getElementById('simStop').addEventListener('click',finish);
+  document.getElementById('simSel').addEventListener('change',()=>{clearInterval(t);left=7200;tim.textContent=fmt(left);document.getElementById('simBox').innerHTML='';document.getElementById('simCheck').style.display='none';});
+})();
+</script>
+</body>
+</html>
